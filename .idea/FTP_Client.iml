@@ -23,5 +23,6 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:21" level="project" />
     <orderEntry type="library" name="Maven: com.mysql:mysql-connector-j:8.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.21.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.30" level="project" />
   </component>
 </module>

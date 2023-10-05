@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class FXMLDisplayApp extends Application {
@@ -24,6 +25,10 @@ public class FXMLDisplayApp extends Application {
 
         // Show the stage
         primaryStage.show();
+
+        // some db testing
+        Database db = new Database();
+        System.out.println(db.login("chase", "chase")); //should print username of user if successful login
     }
 
     public static void main(String[] args) {
