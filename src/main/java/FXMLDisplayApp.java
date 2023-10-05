@@ -29,6 +29,10 @@ public class FXMLDisplayApp extends Application {
         // some db testing
         Database db = new Database();
         System.out.println(db.login("chase", "chase")); //should print username of user if successful login
+
+        //some ftp testing
+        Ftp ftp = new Ftp();
+        ftp.sendTestFile();
     }
 
     public static void main(String[] args) {

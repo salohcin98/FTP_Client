@@ -13,7 +13,7 @@ public class PropertiesLoader {
 
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceFileName)) {
             properties.load(inputStream);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to load: " + resourceFileName + "\nmake sure it is in the resource directory", e);
         }
     }

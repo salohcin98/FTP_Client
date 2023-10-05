@@ -43,6 +43,13 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,6 +75,7 @@
                 <targetPath>${project.build.outputDirectory}</targetPath>
                 <includes>
                     <include>database.properties</include>
+                    <include>ftp.properties</include>
                 </includes>
             </resource>
         </resources>

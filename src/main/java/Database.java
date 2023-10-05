@@ -7,7 +7,7 @@ public class Database {
     private final Connection connection;
 
     public Database() throws SQLException {
-        PropertiesLoader properties = new PropertiesLoader("database.properties");
+        PropertiesLoader properties = new PropertiesLoader("database");
 
         String USERNAME = properties.getProperty("db.username");
         String PASSWORD = properties.getProperty("db.password");
