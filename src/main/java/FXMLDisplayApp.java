@@ -11,7 +11,7 @@ public class FXMLDisplayApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load the FXML file
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ftpmain.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/ftpmain.fxml")));
 
         // Create a scene with the loaded FXML content
         Scene scene = new Scene(root, 600, 400); // Set width and height as needed
