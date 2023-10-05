@@ -1,11 +1,13 @@
 import Utility.PropertiesLoader;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+
 import java.io.*;
 
 public class Ftp {
 
-    public void sendTestFile() {
+    public void test(){
         PropertiesLoader properties = new PropertiesLoader("ftp");
 
         String server = properties.getProperty("ftp.host");
@@ -13,39 +15,41 @@ public class Ftp {
         String username = "outcast";
         String password = "test";
 
+        String localFilePath = "TestFiles/test.txt"; // Replace with the path to your local file
         FTPClient ftpClient = new FTPClient();
-
         try {
             ftpClient.connect(server, port);
             ftpClient.login(username, password);
-
-            // Upload a file
-            String localFilePath = "TestFiles/test.txt";
-            String remoteFilePath = "/testingjoshua/test.txt";
-            FileInputStream inputStream = new FileInputStream(localFilePath);
-            //ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-            ftpClient.storeFile(remoteFilePath, inputStream);
+            ftpClient.enterLocalPassiveMode();
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            File localFile = new File(localFilePath);
+            FileInputStream inputStream = new FileInputStream(localFile);
+            boolean uploaded = ftpClient.storeFile(localFile.getName(), inputStream);
+            if (uploaded) {
+                System.out.println("File uploaded successfully.");
+                FTPFile[] files = ftpClient.listFiles();
+                for (FTPFile file : files) {
+                    System.out.println(file.getName());
+                }
+            }
+            else {
+                System.out.println("File upload failed.");
+            }
             inputStream.close();
-
-            // Download a file
-            /**
-            String localDownloadPath = "path/to/local/downloaded-file.txt";
-            FileOutputStream outputStream = new FileOutputStream(localDownloadPath);
-            ftpClient.retrieveFile(remoteFilePath, outputStream);
-            outputStream.close();
-             */
-
             ftpClient.logout();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (ftpClient.isConnected()) {
-                try {
+        }
+        finally {
+            try {
+                if (ftpClient.isConnected())
                     ftpClient.disconnect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 }
+
+// 

@@ -32,7 +32,7 @@ public class FXMLDisplayApp extends Application {
 
         //some ftp testing
         Ftp ftp = new Ftp();
-        ftp.sendTestFile();
+        ftp.test();
     }
 
     public static void main(String[] args) {
