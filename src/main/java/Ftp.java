@@ -23,7 +23,7 @@ public class Ftp {
             String localFilePath = "TestFiles/test.txt";
             String remoteFilePath = "/testingjoshua/test.txt";
             FileInputStream inputStream = new FileInputStream(localFilePath);
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            //ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             ftpClient.storeFile(remoteFilePath, inputStream);
             inputStream.close();
 
