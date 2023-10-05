@@ -18,6 +18,6 @@ public class User {
 
     @Override
     public String toString(){
-        return userid;
+        return String.format("User: { username: %s, password: %s, id: %s}", userid, password, id);
     }
 }
