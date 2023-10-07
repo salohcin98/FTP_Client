@@ -5,12 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class User {
+public class FTPUser {
     private int id;
     private String userid;
     private String password;
 
-    public User(int id, String userid, String password) {
+    public FTPUser(int id, String userid, String password) {
         this.id = id;
         this.userid = userid;
         this.password = password;
@@ -18,6 +18,6 @@ public class User {
 
     @Override
     public String toString(){
-        return String.format("User: { username: %s, password: %s, id: %s}", userid, password, id);
+        return String.format("FTPUser: { username: %s, password: %s, id: %s}", userid, password, id);
     }
 }

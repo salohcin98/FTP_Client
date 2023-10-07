@@ -74,8 +74,7 @@
                 <directory>src/main/resources</directory> <!-- or the directory where you placed database.properties -->
                 <targetPath>${project.build.outputDirectory}</targetPath>
                 <includes>
-                    <include>database.properties</include>
-                    <include>ftp.properties</include>
+                    <include>**/*.properties</include>
                 </includes>
             </resource>
         </resources>

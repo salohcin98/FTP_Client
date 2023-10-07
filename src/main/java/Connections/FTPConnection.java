@@ -1,3 +1,5 @@
+package Connections;
+
 import Utility.PropertiesLoader;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -5,7 +7,7 @@ import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.*;
 
-public class Ftp {
+public class FTPConnection {
 
     public void test(){
         PropertiesLoader properties = new PropertiesLoader("ftp");

@@ -1,10 +1,11 @@
+import Connections.DBConnection;
+import Connections.FTPConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class FXMLDisplayApp extends Application {
@@ -27,11 +28,11 @@ public class FXMLDisplayApp extends Application {
         primaryStage.show();
 
         // some db testing
-        Database db = new Database();
+        DBConnection db = new DBConnection();
         System.out.println(db.login("chase", "chase")); //should print username of user if successful login
 
         //some ftp testing
-        Ftp ftp = new Ftp();
+        FTPConnection ftp = new FTPConnection();
         ftp.test();
     }
 
