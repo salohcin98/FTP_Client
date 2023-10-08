@@ -1,6 +1,5 @@
 package fxmlControllers;
 
-import Connections.DBConnection;
 import Connections.FTPConnection;
 import Utility.ControllerFunctions;
 import javafx.event.ActionEvent;
@@ -34,7 +33,7 @@ public class LoginPage {
         String password = passwordInput.getText();
 
         // try logging in and check if it failed
-        if (!DBConnection.ftplogin(username, password)){
+        if (!FTPConnection.connect(username, password)){
             errorLabel.setVisible(true);
             passwordInput.setText(""); // clear input field
         }

@@ -55,14 +55,15 @@ public class DBConnection {
     }
 
     /**
-     * Establishes a connection with the ftp server (this is where we will get/send files)
+     * Just an example of how to use queries, so I don't forget later
+     * @deprecated so we know to get rid of it after we make an actual implementation for reference
      *
      * @param userid the username for the ftp connection
      * @param passwd the password for the ftp connection
-     * @return {@link FTPConnection}
+     * @return boolean
      * @throws SQLException Sql error, should only appear if we do something wrong
      */
-    public static boolean ftplogin(String userid, String passwd) throws SQLException, IOException {
+    public static boolean exampleOfUsingQueries(String userid, String passwd) throws SQLException, IOException {
 
         // sql query to check if user exists
         String queryUser = "SELECT * FROM ftpuser WHERE userid = ? AND passwd = ?";
@@ -73,12 +74,11 @@ public class DBConnection {
             String dir = results.getString("homedir");
             // Add other columns as needed if we need to get that data
 
-            // Create and return the connection
-            FTPConnection.updateUser(id, userid, passwd, dir); // Assuming you have a FTPUser class
+            // found
             return true;
         }
 
-        // FTPUser not found
+        // not found
         return false;
     }
 
@@ -87,11 +87,11 @@ public class DBConnection {
      *
      * Example:
      * - query = "SELECT * FROM ftpuser WHERE userid = ? AND passwd = ?"
-     * - SQLQuery(query, ? #1, ? #2)
+     * - SQLQuery(query, param#1, param#2)
      *
      * @param query the sql query
      * @param params the parameters for the query
-     * @return the {@link ResultSet}
+     * @return the {@link ResultSet} might just make this an array of results later so we don't have to deal with that class
      * @throws SQLException Sql error, should only appear if we do something wrong
      */
     private static ResultSet SQLQuery(String query, String... params) throws SQLException {
