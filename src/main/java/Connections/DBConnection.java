@@ -3,7 +3,6 @@ package Connections;
 import java.io.IOException;
 import java.sql.*;
 
-import Entities.FTPUser;
 import Utility.PropertiesLoader;
 
 public class DBConnection {

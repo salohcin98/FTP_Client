@@ -1,8 +1,6 @@
 package fxmlControllers;
 
 import Entities.FileItem;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
