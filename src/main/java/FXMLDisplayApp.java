@@ -16,7 +16,8 @@ public class FXMLDisplayApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //  Load the FXML file and create a scene with the loaded FXML content
-        Scene scene = ControllerFunctions.CreateFXMLScene("LoginPage");
+        //Scene scene = ControllerFunctions.CreateFXMLScene("LoginPage");
+        Scene scene = ControllerFunctions.CreateFXMLScene("FTPMain");
 
         // Set the scene on the primary stage
         primaryStage.setScene(scene);
@@ -28,14 +29,6 @@ public class FXMLDisplayApp extends Application {
         primaryStage.show();
 
         System.out.println("Loaded");
-
-        // some db testing
-        //DBConnection db = new DBConnection();
-        //System.out.println(db.login("chase", "chase")); //should print username of user if successful login
-
-        //some ftp testing
-        //FTPConnection ftp = new FTPConnection();
-        //ftp.test();
     }
 
     public static void main(String[] args) {
