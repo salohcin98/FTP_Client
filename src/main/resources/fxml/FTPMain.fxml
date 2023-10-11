@@ -24,10 +24,10 @@
                </children></AnchorPane>
             <AnchorPane prefHeight="448.0" prefWidth="697.0">
                <children>
-                  <TreeTableView onSort="#ftable" prefHeight="448.0" prefWidth="697.0">
+                  <TreeTableView fx:id="ftable" prefHeight="448.0" prefWidth="697.0">
                     <columns>
-                      <TreeTableColumn onEditStart="#fname" prefWidth="439.0" text="Filename" />
-                      <TreeTableColumn onEditStart="#ftype" prefWidth="83.0" text="Filetype" />
+                      <TreeTableColumn fx:id="fname" prefWidth="439.0" text="Filename" />
+                      <TreeTableColumn fx:id="ftype" prefWidth="83.0" text="Filetype" />
                         <TreeTableColumn fx:id="fsize" prefWidth="71.0" text="Filesize" />
                         <TreeTableColumn fx:id="dadded" prefWidth="103.0" text="Date Added" />
                     </columns>
