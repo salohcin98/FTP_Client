@@ -34,5 +34,7 @@ public class LoginPage {
         else{
             FXMLSceneController.swapScene("FTPMain");
         }
+        usernameInput.setText("");
+        passwordInput.setText("");
     }
 }
