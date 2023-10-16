@@ -12,16 +12,27 @@ public class FileItem {
     private StringProperty fsize = new SimpleStringProperty("");
     private StringProperty ftype = new SimpleStringProperty("");
     private StringProperty dadded = new SimpleStringProperty("");
+    private StringProperty fid = new SimpleStringProperty("");
+    private StringProperty fowner = new SimpleStringProperty("");
+    private StringProperty fdir = new SimpleStringProperty("");
 
     private boolean isFolder = false;
     @Getter
     private final List<FileItem> children = new ArrayList<>();
 
-    public FileItem(String fileName, String fileSize, String fileType, String dateAdded){
+    public FileItem(String fileName, String fileSize, String fileID, String fileOwner, String dateadded){
         this.fname = new SimpleStringProperty(fileName);
         this.fsize = new SimpleStringProperty(fileSize);
-        this.ftype = new SimpleStringProperty(fileType);
-        this.dadded = new SimpleStringProperty(dateAdded);
+        this.fid = new SimpleStringProperty(fileID);
+        this.fowner = new SimpleStringProperty(fileOwner);
+        this.dadded = new SimpleStringProperty(dateadded);
+        this.fdir = new SimpleStringProperty("/mnt/userDir/" + fid + "/" + fname);
+    }
+
+    public FileItem(String fileName, String fileSize, String fileOwner){
+        this.fname = new SimpleStringProperty(fileName);
+        this.fsize = new SimpleStringProperty(fileSize);
+        this.fowner = new SimpleStringProperty(fileOwner);
     }
 
     public FileItem(String folderName, List<FileItem> children){
@@ -62,5 +73,12 @@ public class FileItem {
     public String getDadded() {
         return dadded.get();
     }
+
+    public String getFowner() { return fowner.get(); }
+
+    public String getFdir() { return fdir.get(); }
+
+    public String getFid() { return fid.get(); }
+
 
 }

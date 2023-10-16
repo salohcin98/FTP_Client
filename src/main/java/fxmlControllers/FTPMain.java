@@ -1,6 +1,7 @@
 package fxmlControllers;
 
 import Entities.FileItem;
+import Utility.FTPServerFunctions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
@@ -9,7 +10,10 @@ import javafx.scene.control.TreeTableView;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,7 +28,7 @@ public class FTPMain implements Initializable {
     @FXML
     private TreeTableColumn<FileItem, String> fsize;
     @FXML
-    private TreeTableColumn<FileItem, String> ftype;
+    private TreeTableColumn<FileItem, String> fid;
     @FXML
     private TreeTableColumn<FileItem, String> dadded;
 
@@ -41,8 +45,30 @@ public class FTPMain implements Initializable {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
-        ftype.setCellValueFactory(new TreeItemPropertyValueFactory<>("ftype"));
+        fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
+
+        try {
+            FTPServerFunctions.getUserFiles("nick");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+       /*FileItem item = new FileItem("test.txt","10000", "nick");
+
+        try {
+            FTPServerFunctions.uploadFileInfo(item);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1555050);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1555051);
+        }
+
+
 
         // Create some objects and add them to the table
         FileItem item0 = new FileItem("a", "b", "c", "d");
@@ -60,8 +86,25 @@ public class FTPMain implements Initializable {
         }});
 
         System.out.println("made it");
+        */
+  
+        try {
+            final ArrayList<FileItem> generatedList = new ArrayList<>(FTPServerFunctions.getUserFiles("Nick"));
+            ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{
+                for (FileItem fileItem : generatedList) {
 
-        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(item2); add(item5);}}, new FileItem("Username")));
+                }
+            }}, new FileItem("Username")));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        
+
+
+
     }
 
     // Helper method to generate TreeItems from the data list
