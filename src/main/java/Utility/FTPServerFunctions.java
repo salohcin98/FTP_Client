@@ -28,7 +28,7 @@ public class FTPServerFunctions {
         return fileList;
     }
 
-    public static void uploadFileInfo(FileItem file) throws SQLException, IOException{
+    public static void uploadFileInfo(FileItem file) throws SQLException{
         String query = "Select coalesce(max(fileid), 0)+1 as fid from users.ftpfile;";
         int fileid= DBConnection.SQLQuery(query).getInt("fid");
         int filesize = Integer.parseInt(file.getFsize());
@@ -46,15 +46,36 @@ public class FTPServerFunctions {
 
     }
 
-    public void getFileInfo(){
-
+    public void fileShare(FileItem file, String user) throws SQLException{
+        String fid = file.getFid();
+        String query = "Insert into users.ftpfile_share(fileID,userID) values (" + fid + ",'" + user + "')";
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        st.executeUpdate(query);
+        st.close();
     }
 
-    public void fileShare() {
+    public void deleteFile(FileItem file) throws SQLException{
+        String fid = file.getFid();
+        String query = "select * from users.ftpfile_share where fileID = " + fid;
 
-    }
+        try{
+            Connection conn = DBConnection.getConnection();
+            Statement st = conn.createStatement();
 
-    public void deleteFile(){
-        
+            ResultSet rs = st.executeQuery(query);
+            if(rs.next()){
+                query = "Delete from users.ftpfile_share where fileID = " + fid;
+                st.executeUpdate(query);
+            }
+            query = "Delete from users.ftpfile where fileID = " + fid;
+            st.executeUpdate(query);
+            st.close();
+            rs.close();
+
+        } catch (SQLException e)
+        {
+            System.out.println("Message: " + e.getMessage());
+        }
     }
 }
