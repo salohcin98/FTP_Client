@@ -10,12 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Should be used in 2 places:
+ * 1. Within controllers to swap scenes or create pop-ups
+ * 2. when starting the app to initialize it with the init method
+ */
 public class FXMLSceneController {
     private static Stage primaryStage;
     private static final List<Scene> cachedScenes = new ArrayList<>();
     private static final List<String> cachedFiles = new ArrayList<>();
 
-    public static void init(Stage primaryStage, String windowTitle, String filename) throws Exception {
+    /**
+     * Should only be used once when the program is first started
+     *
+     * @param primaryStage the primary stage created by JavaFX
+     * @param windowTitle the title of the app
+     * @param filename the filename of the Scene to be initially loaded
+     * @throws IOException file not found error
+     */
+    public static void init(Stage primaryStage, String windowTitle, String filename) throws IOException {
         FXMLSceneController.primaryStage = primaryStage;
 
         // Set the scene on the primary stage
@@ -28,11 +41,26 @@ public class FXMLSceneController {
         primaryStage.show();
     }
 
+    /**
+     * Swaps the scene of the primary stage with a different one.
+     * Should be used to swap the current Scene from within a controller.
+     *
+     * @param filename filename of the scene
+     * @throws IOException file not found
+     */
     public static void swapScene(String filename) throws IOException {
         Scene scene = getFXMLScene(filename);
         primaryStage.setScene(scene);
     }
 
+    /**
+     * loads the file as a scene and caches it
+     * helper method
+     *
+     * @param filename the filename of the Scene's file
+     * @return {@link Scene} Object
+     * @throws IOException file not found exception
+     */
     private static Scene getFXMLScene(String filename) throws IOException {
         if (!filename.endsWith(".fxml"))
             filename += ".fxml";

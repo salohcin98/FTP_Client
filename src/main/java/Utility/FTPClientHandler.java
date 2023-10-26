@@ -8,14 +8,28 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
+/**
+ * Simplifies our FTPClient implementation
+ */
 public class FTPClientHandler extends FTPClient {
 
-
+    /**
+     * username of current user
+     */
     private final String username;
 
+    /**
+     * password of current user
+     */
     private final String password;
 
-    public FTPClientHandler(String username, String password) throws IOException {
+    /**
+     * sets the initial username/password of the current user
+     * @param username the username
+     * @param password the password
+     */
+    public FTPClientHandler(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -40,6 +54,10 @@ public class FTPClientHandler extends FTPClient {
         return false;
     }
 
+    /**
+     * logout with in-built disconnect.
+     * @return boolean indicating success
+     */
     @Override
     public boolean logout() throws IOException {
         boolean result = super.logout();

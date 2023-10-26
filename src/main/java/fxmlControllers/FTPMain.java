@@ -52,8 +52,6 @@ public class FTPMain implements Initializable {
             FTPServerFunctions.getUserFiles("nick");
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
        /*FileItem item = new FileItem("test.txt","10000", "nick");
@@ -97,14 +95,7 @@ public class FTPMain implements Initializable {
             }}, new FileItem("Username")));
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        
-
-
-
     }
 
     // Helper method to generate TreeItems from the data list
