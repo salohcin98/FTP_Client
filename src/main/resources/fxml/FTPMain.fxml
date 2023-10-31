@@ -5,11 +5,11 @@
 
 <AnchorPane prefHeight="526.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlControllers.FTPMain">
    <children>
-      <VBox prefHeight="526.0" prefWidth="697.0">
+      <VBox prefHeight="526.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="27.0" prefWidth="697.0">
                <children>
-                  <MenuBar fx:id="mainMenuBar" prefHeight="28.0" prefWidth="627.0">
+                  <MenuBar fx:id="mainMenuBar" prefHeight="28.0" prefWidth="627.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="70.0">
                     <menus>
                       <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
                         <items>
@@ -19,24 +19,27 @@
                       </Menu>
                     </menus>
                   </MenuBar>
-                  <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" text="Upload" />
+                  <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children></AnchorPane>
             <AnchorPane prefHeight="448.0" prefWidth="697.0">
                <children>
-                  <TreeTableView fx:id="ftable" prefHeight="448.0" prefWidth="697.0">
+                  <TreeTableView fx:id="ftable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TreeTableColumn fx:id="fname" prefWidth="439.0" text="Filename" />
-                      <TreeTableColumn fx:id="ftype" prefWidth="83.0" text="Filetype" />
+                      <TreeTableColumn fx:id="fname" prefWidth="429.0" text="Filename" />
+                      <TreeTableColumn fx:id="ftype" prefWidth="93.0" text="Filetype" />
                         <TreeTableColumn fx:id="fsize" prefWidth="71.0" text="Filesize" />
                         <TreeTableColumn fx:id="dadded" prefWidth="103.0" text="Date Added" />
                     </columns>
+                     <columnResizePolicy>
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                   </TreeTableView>
                </children></AnchorPane>
             <AnchorPane prefHeight="50.0" prefWidth="697.0">
                <children>
                   <Button fx:id="downloadButton" layoutX="11.0" layoutY="13.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Download" />
-                  <Button fx:id="deleteButton" layoutX="613.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="70.0" text="Delete" />
-                  <Button fx:id="shareButton" layoutX="524.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="26.0" prefWidth="70.0" text="Share" />
+                  <Button fx:id="deleteButton" layoutX="621.0" layoutY="11.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="62.0" text="Delete" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="14.0" />
+                  <Button fx:id="shareButton" layoutX="541.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="28.0" prefWidth="70.0" text="Share" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="86.0" />
                </children>
             </AnchorPane>
          </children>

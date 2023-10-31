@@ -55,32 +55,32 @@ public class FTPMain implements Initializable {
     public void initialize(URL location, ResourceBundle resources)
     {
 
-        // Set cell value factories
-        fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
-        fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
-        ftype.setCellValueFactory(new TreeItemPropertyValueFactory<>("ftype"));
-        dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
+//        // Set cell value factories
+//        fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
+//        fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
+//        ftype.setCellValueFactory(new TreeItemPropertyValueFactory<>("ftype"));
+//        dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
+//
+//        // Create some objects and add them to the table
+//        FileItem item0 = new FileItem("a", "b", "c", "d");
+//        FileItem item1 = new FileItem("b", "c", "d", "a");
+//        FileItem item2 = new FileItem("Folder 1", new ArrayList<FileItem>()
+//        {{
+//            add(item1);
+//            add(item0);
+//        }});
+//
+//        FileItem item3 = new FileItem("c", "d", "a", "b");
+//        FileItem item4 = new FileItem("d", "a", "b", "c");
+//        FileItem item5 = new FileItem("Folder 2", new ArrayList<FileItem>()
+//        {{
+//            add(item3);
+//            add(item4);
+//        }});
 
-        // Create some objects and add them to the table
-        FileItem item0 = new FileItem("a", "b", "c", "d");
-        FileItem item1 = new FileItem("b", "c", "d", "a");
-        FileItem item2 = new FileItem("Folder 1", new ArrayList<FileItem>()
-        {{
-            add(item1);
-            add(item0);
-        }});
-
-        FileItem item3 = new FileItem("c", "d", "a", "b");
-        FileItem item4 = new FileItem("d", "a", "b", "c");
-        FileItem item5 = new FileItem("Folder 2", new ArrayList<FileItem>()
-        {{
-            add(item3);
-            add(item4);
-        }});
-
-        System.out.println("made it");
-
-        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(item2); add(item5);}}, new FileItem("Username")));
+//        System.out.println("made it");
+//
+//        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(item2); add(item5);}}, new FileItem("Username")));
     }
 
     // Helper method to generate TreeItems from the data list

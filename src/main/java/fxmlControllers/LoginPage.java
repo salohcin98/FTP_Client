@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 public class LoginPage {
 
     @FXML
-    private TextField usernameInput;
+    public TextField usernameInput;
 
     @FXML
     private PasswordField passwordInput;
@@ -34,7 +34,7 @@ public class LoginPage {
         else{
             FXMLSceneController.swapScene("FTPMain");
         }
-        usernameInput.setText("");
-        passwordInput.setText("");
+//        usernameInput.setText("");
+//        passwordInput.setText("");
     }
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.*;
 
 import Utility.PropertiesLoader;
+import lombok.Getter;
+import lombok.Setter;
 
 public class DBConnection {
     private final static PropertiesLoader properties;
@@ -33,6 +35,7 @@ public class DBConnection {
     }
 
     // the Connection the database currently uses
+    @Getter
     private static Connection connection;
 
     /**
@@ -93,7 +96,7 @@ public class DBConnection {
      * @return the {@link ResultSet} might just make this an array of results later so we don't have to deal with that class
      * @throws SQLException Sql error, should only appear if we do something wrong
      */
-    private static ResultSet SQLQuery(String query, String... params) throws SQLException {
+    public static ResultSet SQLQuery(String query, String... params) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
 
         // pass the parameters if needed
