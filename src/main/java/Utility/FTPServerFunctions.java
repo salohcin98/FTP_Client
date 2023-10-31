@@ -21,8 +21,8 @@ public class FTPServerFunctions {
         Connection conn = DBConnection.getConnection();
         String query = "Select fileID,fileName,fileSize,fileUpload from users.ftpfile where fileOwner = '" + user + "'";
         ArrayList<FileItem> fileList = new ArrayList<>();
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery(query);
+        Statement st1 = conn.createStatement();
+        ResultSet rs = st1.executeQuery(query);
         while(rs.next()) {
             String fid = Integer.toString(rs.getInt("fileID"));
             String fsize = Integer.toString(rs.getInt("fileSize"));
@@ -31,7 +31,28 @@ public class FTPServerFunctions {
             FileItem file = new FileItem(fName, fsize, fid, user, fUpload);
             fileList.add(file);
         }
-        st.close();
+
+        query = "Select * from users.ftpfile_share where userID = '" + user + "'";
+        rs = st1.executeQuery(query);
+
+        while(rs.next()) {
+            int fileID = rs.getInt("fileID");
+            String query2 = "Select * from users.ftpfile where fileID = " + fileID;
+            Statement st2 = conn.createStatement();
+            ResultSet rs1 = st2.executeQuery(query2);
+            while(rs1.next()) {
+                String fid1 = Integer.toString(rs1.getInt("fileID"));
+                String fsize1 = Integer.toString(rs1.getInt("fileSize"));
+                String fName1 = rs1.getString("fileName");
+                String fUpload1 = rs1.getString("fileUpload");
+                FileItem file = new FileItem(fName1, fsize1, fid1, user, fUpload1);
+                fileList.add(file);
+            }
+            st2.close();
+            rs1.close();
+        }
+
+        st1.close();
         rs.close();
 
         return fileList;
@@ -102,5 +123,9 @@ public class FTPServerFunctions {
         {
             System.out.println("Message: " + e.getMessage());
         }
+    }
+
+    public void addUser(String user, String pass) throws SQLException{
+
     }
 }
