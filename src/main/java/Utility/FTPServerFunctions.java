@@ -44,8 +44,17 @@ public class FTPServerFunctions {
             fileList.add(file);
         }
 
-        query = "Select * from users.ftpfile_share where userID = '" + username + "'";
-        rs = st1.executeQuery(query);
+        st1.close();
+        rs.close();
+        return fileList;
+    }
+
+    public static ArrayList<FileItem> getSharedFiles() throws SQLException{
+        Connection conn = DBConnection.getConnection();
+        ArrayList<FileItem> fileList = new ArrayList<>();
+        Statement st1 = conn.createStatement();
+        String query = "Select * from users.ftpfile_share where userID = '" + username + "'";
+        ResultSet rs = st1.executeQuery(query);
 
         while(rs.next()) {
             int fileID = rs.getInt("fileID");
@@ -66,9 +75,6 @@ public class FTPServerFunctions {
             st2.close();
             rs1.close();
         }
-
-        st1.close();
-        rs.close();
 
         return fileList;
     }

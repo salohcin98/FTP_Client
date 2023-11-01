@@ -51,24 +51,24 @@ public class FTPMain implements Initializable {
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
-            FTPServerFunctions.getUserFiles();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
+        ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
+        FileItem userFolder = new FileItem(FTPServerFunctions.getUsername(),new ArrayList<FileItem>(){{
+            for(FileItem fileItem : userFiles) {
+                add(fileItem);
+            }}});
+        FileItem sharedFolder = new FileItem("Shared",new ArrayList<FileItem>(){{
+            for(FileItem fileItem : sharedFiles) {
+                add(fileItem);
+            }}});
+
+        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
+                , new FileItem("Username")));
+
+    }catch (SQLException e) {
+            e.printStackTrace();}
 
 
-        try {
-            final ArrayList<FileItem> generatedList = new ArrayList<>(FTPServerFunctions.getUserFiles());
-            ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{
-                for (FileItem fileItem : generatedList) {
-                    if (!fileItem.isFolder())
-                        add(fileItem);
-
-                }
-            }}, new FileItem(FTPServerFunctions.getUsername())));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     // Helper method to generate TreeItems from the data list
