@@ -6,7 +6,7 @@ public class FXMLDisplayApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLSceneController.init(primaryStage, "FTP Client", "FTPMain.fxml");
+        FXMLSceneController.init(primaryStage, "FTP Client", "LoginPage.fxml");
     }
 
     public static void main(String[] args) {
