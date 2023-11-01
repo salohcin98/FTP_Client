@@ -43,7 +43,7 @@ public class FTPClientHandler extends FTPClient {
         int port = Integer.parseInt(properties.getProperty("ftp.port"));
 
         super.connect(server, port);
-        super.enterLocalPassiveMode();
+        //super.enterLocalPassiveMode();
         super.setFileType(FTP.BINARY_FILE_TYPE);
 
         if (super.login(username, password)) {

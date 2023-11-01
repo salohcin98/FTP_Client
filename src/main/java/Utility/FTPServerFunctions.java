@@ -136,7 +136,7 @@ public class FTPServerFunctions {
      * @param file the file's info
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
-    public void deleteFile(FileItem file) throws SQLException{
+    public static void deleteFile(FileItem file) throws SQLException{
         String fid = file.getFid();
         String query = "select * from users.ftpfile_share where fileID = " + fid;
 

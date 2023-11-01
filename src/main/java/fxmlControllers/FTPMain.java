@@ -103,6 +103,19 @@ public class FTPMain implements Initializable {
         initialize(null, null);
     }
 
+    @FXML
+    private void handleDelete() throws SQLException {
+        // Let's get whatever the user has selected
+        TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
+        if (selectedFile == null) return;
+
+        // Use FTPServerFunctions to delete file
+        FTPServerFunctions.deleteFile(selectedFile.getValue());
+
+        // Refresh the table
+        initialize(null, null);
+    }
+
     /*
     @FXML
     private void handleDownload() throws Exception {
