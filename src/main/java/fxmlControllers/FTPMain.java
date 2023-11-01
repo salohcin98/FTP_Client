@@ -97,8 +97,7 @@ public class FTPMain implements Initializable {
         FileItem fileItem = new FileItem(file.getName(), Long.toString(file.length()), FTPServerFunctions.getUsername());
 
         // Use FTPServerFunctions to upload file
-        FTPServerFunctions.uploadFileInfo(fileItem);
-        FTPServerFunctions.uploadFileFTP(file);
+        FTPServerFunctions.uploadFileInfo(fileItem, file);
 
         // Refresh the table
         initialize(null, null);

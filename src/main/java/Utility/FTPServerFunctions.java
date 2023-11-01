@@ -84,7 +84,7 @@ public class FTPServerFunctions {
      * @param file the FileItem with the file's information
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
-    public static void uploadFileInfo(FileItem file) throws SQLException {
+    public static void uploadFileInfo(FileItem file, File fileFTP) throws SQLException, IOException {
         String query = "Select coalesce(max(fileid), 0)+1 as fid from users.ftpfile;";
         ResultSet rs = DBConnection.SQLQuery(query);
         int fileid = 0;
@@ -108,17 +108,15 @@ public class FTPServerFunctions {
         Statement st = conn.createStatement();
         st.executeUpdate(query);
         st.close();
-    }
-    public static void uploadFileFTP(File file) throws IOException {
-        try {
-            ftpClient.login();
-            ftpClient.storeFile(file);
-            ftpClient.logout();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to upload file: " + file.getName());
-        }
+
+        ftpClient.login();
+
+        // Create directory for file , called the fileID
+        ftpClient.createDirectory(Integer.toString(fileid));
+        // Upload the file to fileID directory
+        ftpClient.storeFile(fileFTP, filename);
+
+        ftpClient.logout();
     }
 
     /**
