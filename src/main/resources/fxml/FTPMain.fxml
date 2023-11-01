@@ -19,11 +19,11 @@
                       </Menu>
                     </menus>
                   </MenuBar>
-                  <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children></AnchorPane>
-            <AnchorPane prefHeight="448.0" prefWidth="697.0">
+            <AnchorPane prefHeight="448.0" prefWidth="697.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TreeTableView fx:id="ftable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TreeTableView fx:id="ftable" prefHeight="446.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TreeTableColumn fx:id="fname" prefWidth="429.0" text="Filename" />
                       <TreeTableColumn fx:id="ftype" prefWidth="93.0" text="Filetype" />
@@ -35,13 +35,20 @@
                      </columnResizePolicy>
                   </TreeTableView>
                </children></AnchorPane>
-            <AnchorPane prefHeight="50.0" prefWidth="697.0">
+            <AnchorPane prefHeight="52.0" prefWidth="697.0">
                <children>
-                  <Button fx:id="downloadButton" layoutX="11.0" layoutY="13.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="Download" />
-                  <Button fx:id="deleteButton" layoutX="621.0" layoutY="11.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="62.0" text="Delete" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="14.0" />
-                  <Button fx:id="shareButton" layoutX="541.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="28.0" prefWidth="70.0" text="Share" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="86.0" />
-               </children>
-            </AnchorPane>
+                  <ToolBar prefHeight="52.0" prefWidth="529.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="168.0">
+                    <items>
+                      <Button fx:id="downloadButton" mnemonicParsing="false" text="Download" />
+                    </items>
+                  </ToolBar>
+                  <ToolBar layoutX="257.0" prefHeight="52.0" prefWidth="170.0" AnchorPane.rightAnchor="0.0">
+                     <items>
+                        <Button fx:id="shareButton" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="28.0" prefWidth="70.0" text="Share" />
+                        <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="28.0" prefWidth="76.0" text="Delete" />
+                     </items>
+                  </ToolBar>
+               </children></AnchorPane>
          </children>
       </VBox>
    </children>

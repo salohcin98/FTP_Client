@@ -2,6 +2,7 @@ package fxmlControllers;
 
 import Entities.FileItem;
 import Utility.FTPServerFunctions;
+import Utility.FXMLSceneController;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
@@ -45,7 +46,7 @@ public class FTPMain implements Initializable {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
-        fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
+//        fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
@@ -54,37 +55,6 @@ public class FTPMain implements Initializable {
             e.printStackTrace();
         }
 
-       /*FileItem item = new FileItem("test.txt","10000", "nick");
-
-        try {
-            FTPServerFunctions.uploadFileInfo(item);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1555050);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1555051);
-        }
-
-
-
-        // Create some objects and add them to the table
-        FileItem item0 = new FileItem("a", "b", "c", "d");
-        FileItem item1 = new FileItem("b", "c", "d", "a");
-        FileItem item2 = new FileItem("Folder 1", new ArrayList<FileItem>(){{
-            add(item1);
-            add(item0);
-        }});
-
-        FileItem item3 = new FileItem("c", "d", "a", "b");
-        FileItem item4 = new FileItem("d", "a", "b", "c");
-        FileItem item5 = new FileItem("Folder 2", new ArrayList<FileItem>(){{
-            add(item3);
-            add(item4);
-        }});
-
-        System.out.println("made it");
-        */
   
         try {
             final ArrayList<FileItem> generatedList = new ArrayList<>(FTPServerFunctions.getUserFiles("Nick"));
@@ -108,6 +78,21 @@ public class FTPMain implements Initializable {
                 root.getChildren().add(new TreeItem<>(item));
         });
         return root;
+    }
+
+    public void handleFileAdmin() throws IOException
+    {
+        FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
+    }
+
+    public void handleFileLogout() throws IOException
+    {
+        FXMLSceneController.swapScene("LoginPage");
+    }
+
+    public void handleShareButton() throws IOException
+    {
+        FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
     }
 }
 
