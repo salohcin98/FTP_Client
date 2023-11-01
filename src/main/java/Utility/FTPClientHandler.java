@@ -71,23 +71,16 @@ public class FTPClientHandler extends FTPClient {
      * {@link FTPClient} to simply storing it as a private variable
      * @param file the {@link File}
      */
-    public boolean storeFile(File file) throws IOException {
-        // login and connect to the ftp server
-        login();
 
-        //send the file
-        FileInputStream inputStream = new FileInputStream(file);
-        boolean uploaded = super.storeFile(file.getName(), inputStream);
-        inputStream.close();
-
-        //logout and disconnect
-        logout();
-
-        return uploaded;
+    // Store file in a specific directory
+    public void storeFile(File file, String directory) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
+        super.storeFile(directory, fis);
+        super.changeToParentDirectory();
+        fis.close();
     }
-
-    /**
-     * Get username of current user
-     * @return username
-     */
+    public void createDirectory(String string) throws IOException {
+        super.makeDirectory(string);
+        super.changeWorkingDirectory(string);
+    }
 }
