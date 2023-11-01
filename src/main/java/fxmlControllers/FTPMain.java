@@ -9,6 +9,7 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,54 +46,25 @@ public class FTPMain implements Initializable {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
-        fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
+        //fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
-            FTPServerFunctions.getUserFiles("nick");
+            FTPServerFunctions.getUserFiles();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-       /*FileItem item = new FileItem("test.txt","10000", "nick");
-
-        try {
-            FTPServerFunctions.uploadFileInfo(item);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1555050);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1555051);
-        }
-
-
-
-        // Create some objects and add them to the table
-        FileItem item0 = new FileItem("a", "b", "c", "d");
-        FileItem item1 = new FileItem("b", "c", "d", "a");
-        FileItem item2 = new FileItem("Folder 1", new ArrayList<FileItem>(){{
-            add(item1);
-            add(item0);
-        }});
-
-        FileItem item3 = new FileItem("c", "d", "a", "b");
-        FileItem item4 = new FileItem("d", "a", "b", "c");
-        FileItem item5 = new FileItem("Folder 2", new ArrayList<FileItem>(){{
-            add(item3);
-            add(item4);
-        }});
-
-        System.out.println("made it");
-        */
   
         try {
-            final ArrayList<FileItem> generatedList = new ArrayList<>(FTPServerFunctions.getUserFiles("Nick"));
+            final ArrayList<FileItem> generatedList = new ArrayList<>(FTPServerFunctions.getUserFiles());
             ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{
                 for (FileItem fileItem : generatedList) {
+                    if (!fileItem.isFolder())
+                        add(fileItem);
 
                 }
-            }}, new FileItem("Username")));
+            }}, new FileItem(FTPServerFunctions.getUsername())));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,6 +81,61 @@ public class FTPMain implements Initializable {
         });
         return root;
     }
+
+    @FXML
+    private void handleUpload() throws Exception {
+        // This gets the OS File Explorer
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select File to Upload");
+        File file = fileChooser.showOpenDialog(uploadButton.getScene().getWindow());
+
+        // If canceled, return.. Otherwise selected file is file
+        if (file == null)
+            return;
+
+        FileItem fileItem = new FileItem(file.getName(), Long.toString(file.length()), FTPServerFunctions.getUsername());
+
+        // Use FTPServerFunctions to upload file
+        FTPServerFunctions.uploadFileInfo(fileItem);
+        FTPServerFunctions.uploadFileFTP(file);
+
+        // Refresh the table
+        initialize(null, null);
+    }
+
+    /*
+    @FXML
+    private void handleDownload() throws Exception {
+        // Let's get whatever the user has selected
+        TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
+        if (selectedFile == null) return;
+
+        // File Explorer for selecting where you want to save the file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save File As");
+        fileChooser.setInitialFileName(selectedFile.getValue().getFname());
+
+        // Set localFile = to the users chosen file
+        File localFile = fileChooser.showSaveDialog(downloadButton.getScene().getWindow());
+
+        // If canceled, return.. Otherwise selected file is localFile
+        if (localFile == null) return;
+        FileOutputStream fos = new FileOutputStream(localFile);
+
+        // Use FTPServerFunctions to download file
+        FTPServerFunctions.downloadFile(selectedFile.getValue().getFname(), fos);
+
+        // Close the output stream
+        fos.close();
+
+        // No need to at the moment... BUT if we want to add a progress bar..
+        // Or even just increment the amount of times a file was downloaded.. We could do that too?
+        initialize(null, null);
+    }
+
+     */
+
+
 }
 
 

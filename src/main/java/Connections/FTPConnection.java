@@ -1,12 +1,14 @@
 package Connections;
 
 import Utility.FTPClientHandler;
+import Utility.FTPServerFunctions;
 
 import java.io.*;
 
 public class FTPConnection {
 
     private static FTPClientHandler ftpClient;
+    private static FTPServerFunctions ftpServer;
 
     private static int id;
     private static String directory;
@@ -20,6 +22,7 @@ public class FTPConnection {
      */
     public static boolean connect(String username, String password) throws IOException {
         ftpClient = new FTPClientHandler(username, password);
+        ftpServer = new FTPServerFunctions(username, password);
 
         //test the server connection
         boolean result = ftpClient.login();

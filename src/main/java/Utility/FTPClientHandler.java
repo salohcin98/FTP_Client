@@ -85,4 +85,9 @@ public class FTPClientHandler extends FTPClient {
 
         return uploaded;
     }
+
+    /**
+     * Get username of current user
+     * @return username
+     */
 }
