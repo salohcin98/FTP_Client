@@ -12,14 +12,18 @@ public class FTPAdmin
     private Button userDelete;
     @FXML
     private TextField userField;
+    @FXML
+    private TextField passField;
 
-    public void createUser()
-    {
-        userField.setText("");
-    }
+    public void clearFields() {userField.setText(""); passField.setText("");}
 
     public void deleteUser()
     {
-        userField.setText("");
+        clearFields();
+    }
+
+    public void createUser()
+    {
+        clearFields();
     }
 }

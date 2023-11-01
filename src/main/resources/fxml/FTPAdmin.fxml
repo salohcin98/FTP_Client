@@ -3,11 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="406.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlControllers.FTPAdmin">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="406.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlControllers.FTPAdmin">
    <children>
       <Label layoutX="66.0" layoutY="48.0" text="Username" />
       <TextField fx:id="userField" layoutX="130.0" layoutY="44.0" prefHeight="26.0" prefWidth="176.0" />
-      <Button fx:id="userCreate" layoutX="130.0" layoutY="73.0" mnemonicParsing="false" onAction="#createUser" prefHeight="26.0" prefWidth="85.0" text="Create User" />
-      <Button fx:id="userDelete" layoutX="222.0" layoutY="73.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="26.0" prefWidth="85.0" text="Delete User" />
+      <Button fx:id="userCreate" layoutX="130.0" layoutY="112.0" mnemonicParsing="false" onAction="#createUser" prefHeight="26.0" prefWidth="85.0" text="Create User" />
+      <Button fx:id="userDelete" layoutX="222.0" layoutY="112.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="26.0" prefWidth="85.0" text="Delete User" />
+      <Label layoutX="66.0" layoutY="79.0" text="Password" />
+      <TextField fx:id="passField" layoutX="131.0" layoutY="75.0" prefHeight="26.0" prefWidth="176.0" />
    </children>
 </AnchorPane>
