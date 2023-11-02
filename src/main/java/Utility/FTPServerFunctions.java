@@ -1,11 +1,11 @@
 package Utility;
 import Connections.DBConnection;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import Entities.FileItem;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * static methods within this class are used to get certain information from the FTP server or Database
@@ -85,6 +85,9 @@ public class FTPServerFunctions {
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
     public static void uploadFileInfo(FileItem file, File fileFTP) throws SQLException, IOException {
+
+
+        // SQL / Database Portion
         String query = "Select coalesce(max(fileid), 0)+1 as fid from users.ftpfile;";
         ResultSet rs = DBConnection.SQLQuery(query);
         int fileid = 0;
@@ -109,12 +112,13 @@ public class FTPServerFunctions {
         st.executeUpdate(query);
         st.close();
 
+        // FTP Portion
         ftpClient.login();
+        ftpClient.enterLocalPassiveMode(); // Bypass the 500 Port Error, may differ on school wifi.. Let's check.
+        String dir = Integer.toString(fileid);
 
-        // Create directory for file , called the fileID
-        ftpClient.createDirectory(Integer.toString(fileid));
-        // Upload the file to fileID directory
-        ftpClient.storeFile(fileFTP, filename);
+        ftpClient.createDirectory(dir);
+        ftpClient.storeFile(fileFTP);
 
         ftpClient.logout();
     }
@@ -140,11 +144,14 @@ public class FTPServerFunctions {
      * @param file the file's info
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
-    public static void deleteFile(FileItem file) throws SQLException{
+    public static void deleteFile(FileItem file) throws SQLException, IOException {
+
+        // SQL / Database Portion
         String fid = file.getFid();
+        String fname = file.getFname();
         String query = "select * from users.ftpfile_share where fileID = " + fid;
 
-        try{
+        try {
             Connection conn = DBConnection.getConnection();
             Statement st = conn.createStatement();
 
@@ -158,47 +165,26 @@ public class FTPServerFunctions {
             st.close();
             rs.close();
 
-        } catch (SQLException e)
-        {
+        }
+        catch (SQLException e) {
             System.out.println("Message: " + e.getMessage());
         }
+
+        // FTP Portion
+        ftpClient.login();
+        ftpClient.enterLocalPassiveMode();
+        ftpClient.deleteFile(fname, fid);
+        ftpClient.logout();
     }
 
-    /*
-    public static void downloadFile(String fname, OutputStream fpath) {
-        // Login / Connect / Download.. Also need to implement the SQL download from the database
-        try {
-            ftpClient.login();
-            ftpClient.retrieveFile(fname, fpath);
-            ftpClient.logout();
-            System.out.println("Downloaded file: " + fname);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to download file: " + fname);
-        }
+    // ftp download file
+    public static void downloadFile(FileItem file, OutputStream fos) throws Exception {
+        ftpClient.login();
+        ftpClient.enterLocalPassiveMode();
+        ftpClient.downloadFile(file.getFname(), file.getFid(), fos);
+        ftpClient.logout();
     }
 
-    public static void deleteFile(String fname) {
-        // Login / Delete / Logout.. Also need to implement the SQL delete from the database
-        try {
-            ftpClient.login();
-            ftpClient.deleteFile(fname);
-            ftpClient.logout();
-            System.out.println("Deleted file: " + fname);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to delete file: " + fname);
-        }
-    }
-
-
-
-
-
-
-     */
 
     public void addUser(String user, String pass) throws SQLException{
 

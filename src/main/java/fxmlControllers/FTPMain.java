@@ -13,8 +13,11 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,8 @@ public class FTPMain implements Initializable {
     private Button shareButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Button downloadButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -104,8 +109,8 @@ public class FTPMain implements Initializable {
     }
 
     @FXML
-    private void handleDelete() throws SQLException {
-        // Let's get whatever the user has selected
+    private void handleDelete() throws SQLException, IOException {
+        // Whatever the user has selected
         TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
         if (selectedFile == null) return;
 
@@ -116,10 +121,9 @@ public class FTPMain implements Initializable {
         initialize(null, null);
     }
 
-    /*
     @FXML
     private void handleDownload() throws Exception {
-        // Let's get whatever the user has selected
+        // Whatever the user has selected
         TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
         if (selectedFile == null) return;
 
@@ -128,25 +132,22 @@ public class FTPMain implements Initializable {
         fileChooser.setTitle("Save File As");
         fileChooser.setInitialFileName(selectedFile.getValue().getFname());
 
-        // Set localFile = to the users chosen file
-        File localFile = fileChooser.showSaveDialog(downloadButton.getScene().getWindow());
+        // Path to save the file to
+        File localFilePath = fileChooser.showSaveDialog(downloadButton.getScene().getWindow());
 
-        // If canceled, return.. Otherwise selected file is localFile
-        if (localFile == null) return;
-        FileOutputStream fos = new FileOutputStream(localFile);
+        // If canceled; return
+        if (localFilePath == null) return;
+
+        // OutputStream
+        OutputStream fos = Files.newOutputStream(localFilePath.toPath());
 
         // Use FTPServerFunctions to download file
-        FTPServerFunctions.downloadFile(selectedFile.getValue().getFname(), fos);
+        FTPServerFunctions.downloadFile(selectedFile.getValue(), fos);
 
-        // Close the output stream
-        fos.close();
-
-        // No need to at the moment... BUT if we want to add a progress bar..
-        // Or even just increment the amount of times a file was downloaded.. We could do that too?
+        // Refresh the table
         initialize(null, null);
     }
 
-     */
     public void handleFileAdmin() throws IOException
     {
         FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");

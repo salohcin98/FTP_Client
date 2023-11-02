@@ -39,7 +39,7 @@
                <children>
                   <ToolBar prefHeight="52.0" prefWidth="529.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="168.0">
                     <items>
-                      <Button fx:id="downloadButton" mnemonicParsing="false" text="Download" />
+                      <Button fx:id="downloadButton" mnemonicParsing="false" onAction="#handleDownload" text="Download" />
                     </items>
                   </ToolBar>
                   <ToolBar layoutX="257.0" prefHeight="52.0" prefWidth="170.0" AnchorPane.rightAnchor="0.0">
