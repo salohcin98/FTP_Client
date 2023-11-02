@@ -186,8 +186,54 @@ public class FTPServerFunctions {
     }
 
 
-    public void addUser(String user, String pass) throws SQLException{
+    public static void addUser(String user, String pass) throws SQLException{
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        String query = "Select * from users.ftpuser where userid = '" + user + "'";
+        ResultSet rs = st.executeQuery(query);
 
+        if(rs.next()) {
+            System.out.println("Error... user already exists.");
+        } else {
+            query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell)" +
+                    " VALUES ('"+ user +
+                    "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin')";
+            st.executeUpdate(query);
+        }
+        st.close();
+        rs.close();
+    }
+
+    public static void deleteUser(String user) throws SQLException{
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        String query = "Select * from users.ftpuser where userid = '" + user + "'";
+        ResultSet rs = st.executeQuery(query);
+
+        if(!rs.next()) {
+            System.out.println("Error... user does not exist.");
+        } else {
+            query = "Delete from users.ftpfile where userid = '" + user + "'";
+            st.executeUpdate(query);
+        }
+        st.close();
+        rs.close();
+    }
+
+    public static ArrayList<String> getallUsers() throws SQLException{
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        ArrayList<String> users = new ArrayList<>();
+
+        String query = "Select userid from users.ftpuser where userid <> '" + username + "'";
+        ResultSet rs = st.executeQuery(query);
+        while(rs.next()) {
+            String userid = rs.getString("userid");
+            users.add(userid);
+        }
+        st.close();
+        rs.close();
+        return users;
     }
 
     // Return username
