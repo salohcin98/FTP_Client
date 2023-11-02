@@ -11,7 +11,7 @@
                <children>
                   <TreeTableView prefHeight="360.0" prefWidth="354.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TreeTableColumn prefWidth="353.0" text="Available Users" />
+                      <TreeTableColumn fx:id="userList" prefWidth="353.0" text="Available Users" />
                     </columns>
                   </TreeTableView>
                </children>
@@ -20,7 +20,7 @@
                <children>
                   <ToolBar layoutX="-1.0" prefHeight="40.0" prefWidth="354.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <items>
-                      <Button mnemonicParsing="false" text="Share" />
+                      <Button fx:id="shareButton" mnemonicParsing="false" text="Share" />
                     </items>
                   </ToolBar>
                </children>
