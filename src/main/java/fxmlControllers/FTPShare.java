@@ -12,7 +12,12 @@ public class FTPShare
     @FXML
     private Button shareButton;
     @FXML
-    private TreeTableView userTable;
+    private TreeTableColumn<String[], String> userList;
     @FXML
-    private TreeTableColumn userList;
+    private TreeItem<String> users;
+
+    public void populateTree(String[] userList)
+    {
+
+    }
 }
