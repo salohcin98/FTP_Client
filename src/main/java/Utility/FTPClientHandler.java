@@ -4,9 +4,9 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 /**
@@ -66,21 +66,72 @@ public class FTPClientHandler extends FTPClient {
     }
 
     /**
-     * Store file using the {@link File}.
-     * no need to login or connect when using this. may eventually convert this class from implementing
-     * {@link FTPClient} to simply storing it as a private variable
-     * @param file the {@link File}
+     * Uploads a file to the FTP server
+     * @param file the file to be uploaded
+     * @throws IOException if the file is not found
      */
-
-    // Store file in a specific directory
-    public void storeFile(File file, String directory) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        super.storeFile(directory, fis);
-        super.changeToParentDirectory();
-        fis.close();
+    public void storeFile(File file) throws IOException {
+        if (file.getName().endsWith(".png")) {
+            super.setFileType(FTP.BINARY_FILE_TYPE);
+        }
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            boolean success = super.storeFile(file.getName(), fis);
+            if (success)
+                System.out.println("File " + file.getName() + " uploaded successfully.");
+            else
+                System.out.println("Failed to upload file " + file.getName() + ".");
+            System.out.println("Server reply: " + super.getReplyString());
+        }
+        catch (IOException e) { e.printStackTrace(); }
+        finally { if (fis != null) fis.close(); }
     }
+
+    /**
+     * Creates a directory on the FTP server
+     * @param string the name of the directory to be created
+     * @throws IOException if the directory is not found
+     */
     public void createDirectory(String string) throws IOException {
         super.makeDirectory(string);
         super.changeWorkingDirectory(string);
     }
+
+    /**
+     * Deletes the file and directory from the FTP server
+     * @param fname the name of the file to be deleted
+     * @param fid the id of the file to be deleted
+     * @throws IOException if the file is not found
+     */
+    public void deleteFile(String fname, String fid) throws IOException {
+        super.changeWorkingDirectory(fid);
+        super.deleteFile(fname);
+        super.changeToParentDirectory();
+        super.removeDirectory(fid);
+    }
+
+    /**
+     * Downloads the file from the FTP server
+     * @param fname the name of the file to be downloaded
+     * @param fid the id of the file to be downloaded
+     * @param fos the output stream to write to
+     * @throws IOException if the file is not found
+     */
+    public void downloadFile(String fname, String fid, OutputStream fos) throws IOException {
+        if (fname.endsWith(".png")) {
+            super.setFileType(FTP.BINARY_FILE_TYPE);
+        }
+        super.changeWorkingDirectory(fid);
+        boolean success = super.retrieveFile(fname, fos);
+        fos.close();
+        super.changeToParentDirectory();
+        if (success)
+            System.out.println("File " + fname + " downloaded successfully.");
+        else
+            System.out.println("Failed to download file " + fname + ".");
+        System.out.println("Server reply: " + super.getReplyString());
+    }
+
+
 }
