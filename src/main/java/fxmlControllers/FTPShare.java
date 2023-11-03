@@ -19,7 +19,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import lombok.SneakyThrows;
-import Utility.FTPServerFunctions;
 
 public class FTPShare implements Initializable
 {
@@ -39,7 +38,7 @@ public class FTPShare implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        ArrayList<String> usersArray = FTPServerFunctions.getallUsers();
+        ArrayList<String> usersArray = FTPServerFunctions.getAllUsers();
         for (String s : usersArray)
         {
             userRoot.getChildren().add(new TreeItem<>(s));

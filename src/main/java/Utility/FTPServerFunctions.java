@@ -1,11 +1,13 @@
 package Utility;
-import Connections.DBConnection;
 
 import java.io.*;
 import java.sql.*;
+
+import Connections.DBConnection;
 import Entities.FileItem;
+import Exceptions.UserAlreadyExists;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * static methods within this class are used to get certain information from the FTP server or Database
@@ -14,11 +16,31 @@ public class FTPServerFunctions {
 
     public static FTPClientHandler ftpClient;
     private static String username;
-
     private static FileItem file;
-    public FTPServerFunctions(String username, String password) {
+
+    /**
+     * sets username and password of the current user
+     * and sets up the appropriate ftp connection info
+     *
+     * @param username username of current user
+     * @param password password of current user
+     * @return boolean indicating login success
+     *
+     * note: please do not invert method. Do not listen to intellij
+     */
+    public static boolean setupConnection(String username, String password) {
         ftpClient = new FTPClientHandler(username, password);
-        this.username = username;
+        FTPServerFunctions.username = username;
+
+        //test connection
+        try{
+            boolean result = ftpClient.login(); // returns boolean indicating success
+            if (result) ftpClient.logout();
+            return result;
+        } catch (IOException e){
+            System.err.println(e.getMessage());
+            return false; // login failed
+        }
     }
 
     /**
@@ -87,8 +109,6 @@ public class FTPServerFunctions {
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
     public static void uploadFileInfo(FileItem file, File fileFTP) throws SQLException, IOException {
-
-
         // SQL / Database Portion
         String query = "Select coalesce(max(fileid), 0)+1 as fid from users.ftpfile;";
         ResultSet rs = DBConnection.SQLQuery(query);
@@ -187,22 +207,26 @@ public class FTPServerFunctions {
     }
 
 
-    public static void addUser(String user, String pass) throws SQLException{
+    public static void addUser(String user, String pass) throws SQLException, UserAlreadyExists {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
         String query = "Select * from users.ftpuser where userid = '" + user + "'";
         ResultSet rs = st.executeQuery(query);
 
         if(rs.next()) {
-            System.out.println("Error... user already exists.");
+            st.close();
+            rs.close();
+
+            throw new UserAlreadyExists("User Already Exists");
         } else {
             query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell)" +
                     " VALUES ('"+ user +
                     "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin')";
             st.executeUpdate(query);
+
+            st.close();
+            rs.close();
         }
-        st.close();
-        rs.close();
     }
 
     public static void deleteUser(String user) throws SQLException{
@@ -221,7 +245,7 @@ public class FTPServerFunctions {
         rs.close();
     }
 
-    public static ArrayList<String> getallUsers() throws SQLException{
+    public static ArrayList<String> getAllUsers() throws SQLException{
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
         ArrayList<String> users = new ArrayList<>();
@@ -251,7 +275,4 @@ public class FTPServerFunctions {
     {
         file = fileitem;
     }
-
-
-
 }

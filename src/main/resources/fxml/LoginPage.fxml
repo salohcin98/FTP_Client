@@ -51,7 +51,7 @@
                         <Button fx:id="createAccount" mnemonicParsing="false" onAction = "#handleAccountCreate" prefHeight="26.0" prefWidth="280.0" style="-fx-background-color: darkseagreen;" text="Create Account" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-                  <Label fx:id="errorLabel" alignment="TOP_CENTER" contentDisplay="CENTER" text="Invalid username or password. Please try again." textFill="#f20000" textOverrun="CLIP" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Label fx:id="errorLabel" alignment="TOP_CENTER" contentDisplay="CENTER" textFill="#f20000" textOverrun="CLIP" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>
