@@ -22,7 +22,7 @@ public class LoginPage {
     private Label errorLabel; // The Label for displaying the error message
 
     @FXML
-    private void handleLogin(ActionEvent event) throws Exception {
+    private void handleLogin() throws Exception {
         // Get the values from the username and password fields
         String username = usernameInput.getText();
         String password = passwordInput.getText();
@@ -39,7 +39,7 @@ public class LoginPage {
         passwordInput.setText("");
     }
     @FXML
-    private void handleAccountCreate(ActionEvent event) throws Exception {
+    private void handleAccountCreate() throws Exception {
         // Get the values from the username and password fields
         String username = usernameInput.getText();
         String password = passwordInput.getText();

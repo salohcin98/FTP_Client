@@ -241,6 +241,11 @@ public class FTPServerFunctions {
         return username;
     }
 
+    public static void clearUsername()
+    {
+        username = null;
+    }
+
 
 
 }

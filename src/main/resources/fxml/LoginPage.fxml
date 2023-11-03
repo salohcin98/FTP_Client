@@ -48,7 +48,7 @@
                         <TextField fx:id="usernameInput" alignment="CENTER" focusTraversable="false" promptText="Username" GridPane.columnIndex="1" />
                         <PasswordField fx:id="passwordInput" alignment="CENTER" focusTraversable="false" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" prefHeight="26.0" prefWidth="291.0" style="-fx-background-color: cornflowerblue;" text="Login" textFill="#141414" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-                        <Button fx:id="createAccount" mnemonicParsing="false" prefHeight="26.0" prefWidth="280.0" style="-fx-background-color: darkseagreen;" text="Create Account" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Button fx:id="createAccount" mnemonicParsing="false" onAction = "#handleAccountCreate" prefHeight="26.0" prefWidth="280.0" style="-fx-background-color: darkseagreen;" text="Create Account" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                   <Label fx:id="errorLabel" alignment="TOP_CENTER" contentDisplay="CENTER" text="Invalid username or password. Please try again." textFill="#f20000" textOverrun="CLIP" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="2" />

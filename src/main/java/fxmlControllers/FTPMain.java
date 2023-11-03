@@ -156,6 +156,8 @@ public class FTPMain implements Initializable {
     public void handleFileLogout() throws IOException
     {
         FXMLSceneController.swapScene("LoginPage");
+        FTPServerFunctions.clearUsername();
+        //need an exit to the FTP Client
     }
 
     public void handleShareButton() throws IOException
