@@ -13,7 +13,6 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
@@ -79,9 +78,9 @@ public class FTPMain implements Initializable {
         ftable.setRoot(usernameRoot);
 
 
-    }catch (SQLException e) {
+    }
+        catch (SQLException e) {
             e.printStackTrace();}
-
 
     }
 
@@ -171,6 +170,8 @@ public class FTPMain implements Initializable {
 
     public void handleShareButton() throws IOException
     {
+        // Get selected file from tree
+        FTPServerFunctions.setFile(ftable.getSelectionModel().getSelectedItem().getValue());
         FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
     }
 }

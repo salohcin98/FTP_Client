@@ -1,5 +1,6 @@
 package fxmlControllers;
 
+import Entities.FileItem;
 import Utility.FTPServerFunctions;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 
 import java.net.URL;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -29,12 +31,14 @@ public class FTPShare implements Initializable
 
     private final TreeItem<String> userRoot = new TreeItem<>("Users");
 
+    private FileItem file;
+
 
     @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        ArrayList<String> usersArray = FTPServerFunctions.getallUsers();
+        ArrayList<String> usersArray = FTPServerFunctions.getAllUsers();
         for (String s : usersArray)
         {
             userRoot.getChildren().add(new TreeItem<>(s));
@@ -43,8 +47,17 @@ public class FTPShare implements Initializable
         userTable.setRoot(userRoot);
     }
 
-    public void shareFile()
-    {
+    @FXML
+    private void handleShare() throws SQLException {
+        TreeItem<String> selectedUser = userTable.getSelectionModel().getSelectedItem();
+        if (selectedUser != null)
+        {
+            FTPServerFunctions.fileShare(selectedUser.getValue());
+        }
+    }
 
+    public void setFile(FileItem file)
+    {
+        this.file = file;
     }
 }
