@@ -58,7 +58,7 @@ public class FTPMain implements Initializable {
         ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
         ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
 
-        FileItem userFolder = new FileItem(FTPServerFunctions.getUsername(),new ArrayList<FileItem>(){{
+        FileItem userFolder = new FileItem("Owned",new ArrayList<FileItem>(){{
             for(FileItem fileItem : userFiles) {
                 add(fileItem);
             }}});
@@ -68,15 +68,8 @@ public class FTPMain implements Initializable {
                 add(fileItem);
             }}});
 
-//        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
-//                , new FileItem(FTPServerFunctions.getUsername())));
-        TreeItem<FileItem> usernameRoot = new TreeItem<>(userFolder);
-        TreeItem<FileItem> sharedRoot = new TreeItem<>(sharedFolder);
-        usernameRoot.getChildren().add(sharedRoot);
-        TreeItem<FileItem> dummyRoot = new TreeItem<>();
-        dummyRoot.getChildren().addAll(usernameRoot, sharedRoot);
-        ftable.setRoot(usernameRoot);
-
+        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
+                , new FileItem(FTPServerFunctions.getUsername())));
 
     }
         catch (SQLException e) {
@@ -165,7 +158,6 @@ public class FTPMain implements Initializable {
     {
         FXMLSceneController.swapScene("LoginPage");
         FTPServerFunctions.clearUsername();
-        //need an exit to the FTP Client
     }
 
     public void handleShareButton() throws IOException
