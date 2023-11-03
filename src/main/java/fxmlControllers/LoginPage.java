@@ -1,6 +1,7 @@
 package fxmlControllers;
 
 import Connections.FTPConnection;
+import Utility.FTPServerFunctions;
 import Utility.FXMLSceneController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +26,24 @@ public class LoginPage {
         // Get the values from the username and password fields
         String username = usernameInput.getText();
         String password = passwordInput.getText();
+
+        // try logging in and check if it failed
+        if (!FTPConnection.connect(username, password)){
+            errorLabel.setVisible(true);
+            passwordInput.setText(""); // clear input field
+        }
+        else{
+            FXMLSceneController.swapScene("FTPMain");
+        }
+        usernameInput.setText("");
+        passwordInput.setText("");
+    }
+    @FXML
+    private void handleAccountCreate(ActionEvent event) throws Exception {
+        // Get the values from the username and password fields
+        String username = usernameInput.getText();
+        String password = passwordInput.getText();
+        FTPServerFunctions.addUser(username, password);
 
         // try logging in and check if it failed
         if (!FTPConnection.connect(username, password)){
