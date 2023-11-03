@@ -18,17 +18,7 @@ import java.util.Objects;
  */
 public class FXMLSceneController {
     private static Stage primaryStage;
-    private static final List<Scene> cachedScenes = new ArrayList<>();
-    private static final List<String> cachedFiles = new ArrayList<>();
 
-    /**
-     * Should only be used once when the program is first started
-     *
-     * @param primaryStage the primary stage created by JavaFX
-     * @param windowTitle the title of the app
-     * @param filename the filename of the Scene to be initially loaded
-     * @throws IOException file not found error
-     */
     public static void init(Stage primaryStage, String windowTitle, String filename) throws IOException {
         FXMLSceneController.primaryStage = primaryStage;
 
@@ -42,48 +32,21 @@ public class FXMLSceneController {
         primaryStage.show();
     }
 
-    /**
-     * Swaps the scene of the primary stage with a different one.
-     * Should be used to swap the current Scene from within a controller.
-     *
-     * @param filename filename of the scene
-     * @throws IOException file not found
-     */
     public static void swapScene(String filename) throws IOException {
-        Scene scene = getFXMLScene(filename);
+        Scene scene = loadFXMLScene(filename);
         primaryStage.setScene(scene);
     }
 
-    /**
-     * loads the file as a scene and caches it
-     * helper method
-     *
-     * @param filename the filename of the Scene's file
-     * @return {@link Scene} Object
-     * @throws IOException file not found exception
-     */
-    private static Scene getFXMLScene(String filename) throws IOException {
+    private static Scene loadFXMLScene(String filename) throws IOException {
         if (!filename.endsWith(".fxml"))
             filename += ".fxml";
 
-        // check if cached
-        int index;
-        if ((index = cachedFiles.indexOf(filename)) != -1){
-            return cachedScenes.get(index);
-        }
-
-        // if not cached, load it
         URL resourceUrl = FXMLSceneController.class.getResource("/fxml/" + filename);
         if (resourceUrl == null) {
             throw new IOException("FXML file not found: " + filename);
         }
-        Scene scene = new Scene(FXMLLoader.load(Objects.requireNonNull(resourceUrl)));
 
-        //cache it
-        cachedScenes.add(scene);
-        cachedFiles.add(filename);
-
-        return scene;
+        return new Scene(FXMLLoader.load(Objects.requireNonNull(resourceUrl)));
     }
 
     public static void createPopUp(String filename, String windowName) throws IOException {
@@ -91,7 +54,7 @@ public class FXMLSceneController {
         Stage secondaryStage = new Stage();
         secondaryStage.setTitle(windowName);
 
-        Scene scene = getFXMLScene(filename);
+        Scene scene = loadFXMLScene(filename);
 
         // Set the scene for the secondary stage
         secondaryStage.setScene(scene);

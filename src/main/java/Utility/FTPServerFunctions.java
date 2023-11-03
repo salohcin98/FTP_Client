@@ -14,6 +14,8 @@ public class FTPServerFunctions {
 
     public static FTPClientHandler ftpClient;
     private static String username;
+
+    private static FileItem file;
     public FTPServerFunctions(String username, String password) {
         ftpClient = new FTPClientHandler(username, password);
         this.username = username;
@@ -125,11 +127,10 @@ public class FTPServerFunctions {
 
     /**
      *
-     * @param file the file's info
      * @param user the userid of the user
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
-    public void fileShare(FileItem file, String user) throws SQLException{
+    public static void fileShare(String user) throws SQLException{
         String fid = file.getFid();
         String query = "Insert into users.ftpfile_share(fileID,userID) values (" + fid + ",'" + user + "')";
         Connection conn = DBConnection.getConnection();
@@ -244,6 +245,11 @@ public class FTPServerFunctions {
     public static void clearUsername()
     {
         username = null;
+    }
+
+    public static void setFile(FileItem fileitem)
+    {
+        file = fileitem;
     }
 
 

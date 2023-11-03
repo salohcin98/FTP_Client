@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import fxmlControllers.FTPShare;
 
 public class FTPMain implements Initializable {
 
@@ -70,9 +71,9 @@ public class FTPMain implements Initializable {
         ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
                 , new FileItem("Username")));
 
-    }catch (SQLException e) {
+    }
+        catch (SQLException e) {
             e.printStackTrace();}
-
 
     }
 
@@ -162,6 +163,8 @@ public class FTPMain implements Initializable {
 
     public void handleShareButton() throws IOException
     {
+        // Get selected file from tree
+        FTPServerFunctions.setFile(ftable.getSelectionModel().getSelectedItem().getValue());
         FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
     }
 }

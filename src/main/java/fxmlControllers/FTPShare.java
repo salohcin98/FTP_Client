@@ -1,5 +1,6 @@
 package fxmlControllers;
 
+import Entities.FileItem;
 import Utility.FTPServerFunctions;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 
 import java.net.URL;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -17,6 +19,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import lombok.SneakyThrows;
+import Utility.FTPServerFunctions;
 
 public class FTPShare implements Initializable
 {
@@ -28,6 +31,8 @@ public class FTPShare implements Initializable
     private TreeTableView<String> userTable;
 
     private final TreeItem<String> userRoot = new TreeItem<>("Users");
+
+    private FileItem file;
 
 
     @SneakyThrows
@@ -43,8 +48,17 @@ public class FTPShare implements Initializable
         userTable.setRoot(userRoot);
     }
 
-    public void shareFile()
-    {
+    @FXML
+    private void handleShare() throws SQLException {
+        TreeItem<String> selectedUser = userTable.getSelectionModel().getSelectedItem();
+        if (selectedUser != null)
+        {
+            FTPServerFunctions.fileShare(selectedUser.getValue());
+        }
+    }
 
+    public void setFile(FileItem file)
+    {
+        this.file = file;
     }
 }
