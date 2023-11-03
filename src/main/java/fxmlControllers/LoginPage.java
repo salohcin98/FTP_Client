@@ -23,9 +23,11 @@ public class LoginPage {
 
     @FXML
     private void handleLogin() throws Exception {
+        FTPServerFunctions.ftpClient = null;
         // Get the values from the username and password fields
         String username = usernameInput.getText();
         String password = passwordInput.getText();
+
 
         // try logging in and check if it failed
         if (!FTPConnection.connect(username, password)){
@@ -40,6 +42,7 @@ public class LoginPage {
     }
     @FXML
     private void handleAccountCreate() throws Exception {
+        FTPServerFunctions.ftpClient = null;
         // Get the values from the username and password fields
         String username = usernameInput.getText();
         String password = passwordInput.getText();
