@@ -58,17 +58,26 @@ public class FTPMain implements Initializable {
         try {
         ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
         ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
+
         FileItem userFolder = new FileItem(FTPServerFunctions.getUsername(),new ArrayList<FileItem>(){{
             for(FileItem fileItem : userFiles) {
                 add(fileItem);
             }}});
+
         FileItem sharedFolder = new FileItem("Shared",new ArrayList<FileItem>(){{
             for(FileItem fileItem : sharedFiles) {
                 add(fileItem);
             }}});
 
-        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
-                , new FileItem("Username")));
+//        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
+//                , new FileItem(FTPServerFunctions.getUsername())));
+        TreeItem<FileItem> usernameRoot = new TreeItem<>(userFolder);
+        TreeItem<FileItem> sharedRoot = new TreeItem<>(sharedFolder);
+        usernameRoot.getChildren().add(sharedRoot);
+        TreeItem<FileItem> dummyRoot = new TreeItem<>();
+        dummyRoot.getChildren().addAll(usernameRoot, sharedRoot);
+        ftable.setRoot(usernameRoot);
+
 
     }catch (SQLException e) {
             e.printStackTrace();}
