@@ -213,7 +213,7 @@ public class FTPServerFunctions {
         if(!rs.next()) {
             System.out.println("Error... user does not exist.");
         } else {
-            query = "Delete from users.ftpfile where userid = '" + user + "'";
+            query = "Delete from users.ftpuser where userid = '" + user + "'";
             st.executeUpdate(query);
         }
         st.close();

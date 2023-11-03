@@ -1,8 +1,13 @@
 package fxmlControllers;
 
+import Utility.FTPServerFunctions;
+
 import javafx.fxml.FXML;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
+import java.sql.SQLException;
 
 public class FTPAdmin
 {
@@ -17,13 +22,15 @@ public class FTPAdmin
 
     public void clearFields() {userField.setText(""); passField.setText("");}
 
-    public void deleteUser()
+    public void deleteUser() throws SQLException
     {
+        FTPServerFunctions.deleteUser(userField.getText());
         clearFields();
     }
 
-    public void createUser()
+    public void createUser() throws SQLException
     {
+        FTPServerFunctions.addUser(userField.getText(), passField.getText());
         clearFields();
     }
 }
