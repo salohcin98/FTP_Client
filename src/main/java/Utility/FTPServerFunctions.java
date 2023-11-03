@@ -114,7 +114,7 @@ public class FTPServerFunctions {
 
         // FTP Portion
         ftpClient.login();
-        ftpClient.enterLocalPassiveMode(); // Bypass the 500 Port Error, may differ on school wifi.. Let's check.
+        //ftpClient.enterLocalPassiveMode(); // Bypass the 500 Port Error, may differ on school wifi.. Let's check.
         String dir = Integer.toString(fileid);
 
         ftpClient.createDirectory(dir);
@@ -172,7 +172,7 @@ public class FTPServerFunctions {
 
         // FTP Portion
         ftpClient.login();
-        ftpClient.enterLocalPassiveMode();
+        //ftpClient.enterLocalPassiveMode();
         ftpClient.deleteFile(fname, fid);
         ftpClient.logout();
     }
@@ -180,7 +180,7 @@ public class FTPServerFunctions {
     // ftp download file
     public static void downloadFile(FileItem file, OutputStream fos) throws Exception {
         ftpClient.login();
-        ftpClient.enterLocalPassiveMode();
+        //ftpClient.enterLocalPassiveMode();
         ftpClient.downloadFile(file.getFname(), file.getFid(), fos);
         ftpClient.logout();
     }
