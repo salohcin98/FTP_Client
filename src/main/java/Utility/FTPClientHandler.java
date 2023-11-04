@@ -5,8 +5,6 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 
 /**
@@ -43,15 +41,28 @@ public class FTPClientHandler extends FTPClient {
         int port = Integer.parseInt(properties.getProperty("ftp.port"));
 
         super.connect(server, port);
-        //super.enterLocalPassiveMode();
-        super.setFileType(FTP.BINARY_FILE_TYPE);
 
         if (super.login(username, password)) {
             // Check the FTP server's reply code for successful login
-            return FTPReply.isPositiveCompletion(super.getReplyCode());
-        }
+            boolean success = FTPReply.isPositiveCompletion(super.getReplyCode());
+            togglePassiveMode();
+            super.setFileType(FTP.BINARY_FILE_TYPE);
+            System.out.println("Server reply: " + super.getReplyString());
 
+            return success;
+        }
         return false;
+    }
+
+    /**
+     * Toggles passive mode if the server responds with 500
+     * @throws IOException if the server is not found
+     */
+    public void togglePassiveMode() throws IOException {
+        super.listFiles(); // this is a hack to get the server to respond with 500
+        if(super.getReplyCode() == 500) {
+            super.enterLocalPassiveMode();
+        }
     }
 
     /**
@@ -71,10 +82,7 @@ public class FTPClientHandler extends FTPClient {
      * @throws IOException if the file is not found
      */
     public void storeFile(File file) throws IOException {
-        super.setFileType(FTP.BINARY_FILE_TYPE);
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
+        try (FileInputStream fis = new FileInputStream(file)) {
             boolean success = super.storeFile(file.getName(), fis);
             if (success)
                 System.out.println("File " + file.getName() + " uploaded successfully.");
@@ -82,18 +90,20 @@ public class FTPClientHandler extends FTPClient {
                 System.out.println("Failed to upload file " + file.getName() + ".");
             System.out.println("Server reply: " + super.getReplyString());
         }
-        catch (IOException e) { e.printStackTrace(); }
-        finally { if (fis != null) fis.close(); }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Creates a directory on the FTP server
-     * @param string the name of the directory to be created
+     * @param path the name of the directory to be created
      * @throws IOException if the directory is not found
      */
-    public void createDirectory(String string) throws IOException {
-        super.makeDirectory(string);
-        super.changeWorkingDirectory(string);
+    public void createDirectory(String path) throws IOException {
+        super.makeDirectory(path);
+        super.changeWorkingDirectory(path);
+        System.out.println("Server reply: " + super.getReplyString());
     }
 
     /**
@@ -108,7 +118,6 @@ public class FTPClientHandler extends FTPClient {
         super.changeToParentDirectory();
         super.removeDirectory(fid);
     }
-
     /**
      * Downloads the file from the FTP server
      * @param fname the name of the file to be downloaded
@@ -117,7 +126,6 @@ public class FTPClientHandler extends FTPClient {
      * @throws IOException if the file is not found
      */
     public void downloadFile(String fname, String fid, OutputStream fos) throws IOException {
-        super.setFileType(FTP.BINARY_FILE_TYPE);
         super.changeWorkingDirectory(fid);
         boolean success = super.retrieveFile(fname, fos);
         fos.close();
@@ -128,6 +136,4 @@ public class FTPClientHandler extends FTPClient {
             System.out.println("Failed to download file " + fname + ".");
         System.out.println("Server reply: " + super.getReplyString());
     }
-
-
 }
