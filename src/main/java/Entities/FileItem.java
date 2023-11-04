@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileItem {
+public class FileItem implements Item {
     private StringProperty fname;
     private StringProperty fsize = new SimpleStringProperty("");
     private StringProperty ftype = new SimpleStringProperty("");
@@ -16,16 +16,13 @@ public class FileItem {
     private StringProperty fowner = new SimpleStringProperty("");
     private StringProperty fdir = new SimpleStringProperty("");
 
-    private boolean isFolder = false;
-    @Getter
-    private final List<FileItem> children = new ArrayList<>();
+    public FileItem(String fname, String fsize, String fid, String fowner, String dadded){
+        this.fname = new SimpleStringProperty(fname);
+        this.fsize = new SimpleStringProperty(fsize);
+        this.fid = new SimpleStringProperty(fid);
+        this.fowner = new SimpleStringProperty(fowner);
+        this.dadded = new SimpleStringProperty(dadded);
 
-    public FileItem(String fileName, String fileSize, String fileID, String fileOwner, String dateadded){
-        this.fname = new SimpleStringProperty(fileName);
-        this.fsize = new SimpleStringProperty(fileSize);
-        this.fid = new SimpleStringProperty(fileID);
-        this.fowner = new SimpleStringProperty(fileOwner);
-        this.dadded = new SimpleStringProperty(dateadded);
         this.fdir = new SimpleStringProperty("/mnt/userDir/" + fid + "/" + fname);
     }
 
@@ -33,29 +30,6 @@ public class FileItem {
         this.fname = new SimpleStringProperty(fileName);
         this.fsize = new SimpleStringProperty(fileSize);
         this.fowner = new SimpleStringProperty(fileOwner);
-    }
-
-    public FileItem(String folderName, List<FileItem> children){
-        this.fname = new SimpleStringProperty(folderName);
-        isFolder = true;
-        this.children.addAll(children);
-    }
-
-    public FileItem(String folderName){
-        this.fname = new SimpleStringProperty(folderName);
-        isFolder = true;
-    }
-
-    public boolean isFolder(){
-        return isFolder;
-    }
-
-    public void addChildren(List<FileItem> children){
-        this.children.addAll(children);
-    }
-
-    public void addChildren(FileItem child){
-        children.add(child);
     }
 
     public String getFname() {
@@ -80,6 +54,8 @@ public class FileItem {
 
     public String getFid() { return fid.get(); }
 
-
+    public String toString(){
+        return String.format("fileItem{ id: %s, name: %s, type: %s, owner: %s, path: %s, size: %s, added: %s }", getFid(), getFname(), getFtype(), getFowner(), getFdir(), getFsize(), getDadded());
+    }
 
 }

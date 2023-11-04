@@ -90,7 +90,7 @@ public class DBConnection {
      * Example:
      * - query = "SELECT * FROM ftpuser WHERE userid = ? AND passwd = ?"
      * - SQLQuery(query, param#1, param#2)
-     *
+     * @deprecated we shouldn't really be using this
      * @param query the sql query
      * @param params the parameters for the query
      * @return the {@link ResultSet} might just make this an array of results later so we don't have to deal with that class

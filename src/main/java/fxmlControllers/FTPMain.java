@@ -1,6 +1,8 @@
 package fxmlControllers;
 
 import Entities.FileItem;
+import Entities.Folder;
+import Entities.Item;
 import Utility.FTPServerFunctions;
 import Utility.FXMLSceneController;
 import javafx.fxml.Initializable;
@@ -25,16 +27,16 @@ import java.util.ResourceBundle;
 public class FTPMain implements Initializable {
 
     @FXML
-    private TreeTableView<FileItem> ftable;
+    private TreeTableView<Item> ftable;
 
     @FXML
-    private TreeTableColumn<FileItem, String> fname;
+    private TreeTableColumn<Item, String> fname;
     @FXML
-    private TreeTableColumn<FileItem, String> fsize;
+    private TreeTableColumn<Item, String> fsize;
     @FXML
-    private TreeTableColumn<FileItem, String> fid;
+    private TreeTableColumn<Item, String> fid;
     @FXML
-    private TreeTableColumn<FileItem, String> dadded;
+    private TreeTableColumn<Item, String> dadded;
 
     @FXML
     private Button uploadButton;
@@ -57,30 +59,30 @@ public class FTPMain implements Initializable {
         try {
         ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
         ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
-        FileItem userFolder = new FileItem(FTPServerFunctions.getUsername(),new ArrayList<FileItem>(){{
-            for(FileItem fileItem : userFiles) {
-                add(fileItem);
-            }}});
-        FileItem sharedFolder = new FileItem("Shared",new ArrayList<FileItem>(){{
-            for(FileItem fileItem : sharedFiles) {
-                add(fileItem);
-            }}});
 
-        ftable.setRoot(generateTreeItems(new ArrayList<FileItem>(){{add(userFolder); add(sharedFolder);}}
-                , new FileItem("Username")));
+        System.out.println(userFiles);
 
-    }
-        catch (SQLException e) {
+        Folder userFolder = new Folder(FTPServerFunctions.getUsername(), new ArrayList<Item>(){{
+            this.addAll(userFiles);
+        }});
+
+        Folder sharedFolder = new Folder("Shared", new ArrayList<Item>(){{
+            this.addAll(sharedFiles);
+        }});
+
+        ftable.setRoot(generateTreeItems(new ArrayList<Item>(){{add(userFolder); add(sharedFolder);}}
+                , new Folder("root")));
+        ftable.setShowRoot(false);
+    } catch (SQLException e) {
             e.printStackTrace();}
-
     }
 
     // Helper method to generate TreeItems from the data list
-    private TreeItem<FileItem> generateTreeItems(List<FileItem> data, FileItem RootFolder) {
-        TreeItem<FileItem> root = new TreeItem<>(RootFolder);
+    private TreeItem<Item> generateTreeItems(List<Item> data, Folder RootFolder) {
+        TreeItem<Item> root = new TreeItem<>(RootFolder);
         data.forEach(item -> {
-            if (item.isFolder())
-                root.getChildren().add(generateTreeItems(item.getChildren(), item));
+            if (item instanceof Folder)
+                root.getChildren().add(generateTreeItems(((Folder) item).getChildren(), (Folder) item));
             else
                 root.getChildren().add(new TreeItem<>(item));
         });
@@ -103,33 +105,37 @@ public class FTPMain implements Initializable {
         // Use FTPServerFunctions to upload file
         FTPServerFunctions.uploadFileInfo(fileItem, file);
 
-        // Refresh the table
+        // Refresh the table (it should be fine to refresh here)
         initialize(null, null);
     }
 
     @FXML
     private void handleDelete() throws SQLException, IOException {
         // Whatever the user has selected
-        TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
-        if (selectedFile == null) return;
+        TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
+
+        if (selectedFile == null) return; //check null
+        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
 
         // Use FTPServerFunctions to delete file
-        FTPServerFunctions.deleteFile(selectedFile.getValue());
+        FTPServerFunctions.deleteFile((FileItem) selectedFile.getValue());
 
-        // Refresh the table
-        initialize(null, null);
+        // remove the item (don't refresh as it closes all drop-downs)
+        selectedFile.getParent().getChildren().remove(selectedFile);
     }
 
     @FXML
     private void handleDownload() throws Exception {
         // Whatever the user has selected
-        TreeItem<FileItem> selectedFile = ftable.getSelectionModel().getSelectedItem();
-        if (selectedFile == null) return;
+        TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
+
+        if (selectedFile == null) return; //check null
+        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
 
         // File Explorer for selecting where you want to save the file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File As");
-        fileChooser.setInitialFileName(selectedFile.getValue().getFname());
+        fileChooser.setInitialFileName(((FileItem) selectedFile.getValue()).getFname());
 
         // Path to save the file to
         File localFilePath = fileChooser.showSaveDialog(downloadButton.getScene().getWindow());
@@ -141,7 +147,7 @@ public class FTPMain implements Initializable {
         OutputStream fos = Files.newOutputStream(localFilePath.toPath());
 
         // Use FTPServerFunctions to download file
-        FTPServerFunctions.downloadFile(selectedFile.getValue(), fos);
+        FTPServerFunctions.downloadFile((FileItem) selectedFile.getValue(), fos);
 
         // Refresh the table
         initialize(null, null);
@@ -161,8 +167,14 @@ public class FTPMain implements Initializable {
 
     public void handleShareButton() throws IOException
     {
+        // Whatever the user has selected
+        TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
+
+        if (selectedFile == null) return; //check null
+        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
+
         // Get selected file from tree
-        FTPServerFunctions.setFile(ftable.getSelectionModel().getSelectedItem().getValue());
+        FTPServerFunctions.setFile((FileItem) selectedFile.getValue());
         FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
     }
 }
