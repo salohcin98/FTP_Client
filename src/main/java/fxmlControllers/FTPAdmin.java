@@ -1,8 +1,12 @@
 package fxmlControllers;
 
+import Exceptions.UserAlreadyExists;
+import Utility.FTPServerFunctions;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
+import java.sql.SQLException;
 
 public class FTPAdmin
 {
@@ -22,8 +26,8 @@ public class FTPAdmin
         clearFields();
     }
 
-    public void createUser()
-    {
+    public void createUser() throws UserAlreadyExists, SQLException {
+        FTPServerFunctions.addUser(userField.getText(), passField.getText());
         clearFields();
     }
 }

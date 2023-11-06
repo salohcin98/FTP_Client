@@ -215,10 +215,10 @@ public class FTPServerFunctions {
             rs.close();
             // FTP Portion
             ftpClient.login();
-            //ftpClient.enterLocalPassiveMode();
             ftpClient.deleteFile(fname, fid);
             ftpClient.logout();
-        } else {
+        }
+        else {
             query = "Delete from users.ftpfile_share where fileID = " + fid + " and userid = '" + username + "'";
             st.executeUpdate(query);
         }
@@ -228,7 +228,6 @@ public class FTPServerFunctions {
     // ftp download file
     public static void downloadFile(FileItem file, OutputStream fos) throws Exception {
         ftpClient.login();
-        //ftpClient.enterLocalPassiveMode();
         ftpClient.downloadFile(file.getFname(), file.getFid(), fos);
         ftpClient.logout();
     }
