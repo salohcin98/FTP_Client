@@ -29,5 +29,6 @@ public class FTPAdmin
     public void createUser() throws UserAlreadyExists, SQLException {
         FTPServerFunctions.addUser(userField.getText(), passField.getText(), false);
         clearFields();
+
     }
 }

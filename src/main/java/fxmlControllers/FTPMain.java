@@ -153,9 +153,15 @@ public class FTPMain implements Initializable {
         initialize(null, null);
     }
 
-    public void handleFileAdmin() throws IOException
-    {
-        FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
+    public void handleFileAdmin() throws IOException, SQLException {
+        if(FTPServerFunctions.isUserAdmin())
+            FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
+        else {
+            // front end, add a popup error message here.
+            // Make it so the admin button is seperate and doenst show up if they're not actually an damin
+            // call the ftpserverfunctions.isuseradmin to return boolean
+        }
+
     }
 
     public void handleFileLogout() throws IOException

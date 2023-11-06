@@ -17,7 +17,6 @@ public class FTPServerFunctions {
     public static FTPClientHandler ftpClient;
     private static String username;
     private static FileItem sharedfile;
-    private static boolean admin;
 
     /**
      * sets username and password of the current user
@@ -42,7 +41,6 @@ public class FTPServerFunctions {
             if(rs.next()){
                 boolean result = ftpClient.login(); // returns boolean indicating success
                 if (result) ftpClient.logout();
-                isUserAdmin();
                 st.close();
                 rs.close();
                 return result;
@@ -291,13 +289,13 @@ public class FTPServerFunctions {
         return users;
     }
 
-    public static void isUserAdmin() throws SQLException {
+    public static boolean isUserAdmin() throws SQLException {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
         String query = "Select * from users.ftpuser where userid = '" + username + "' and admin = 'x' and status = 'Active'";
         ResultSet rs = st.executeQuery(query);
-        if(rs.next())  admin = true;
-        else admin = false;
+        if(rs.next())  return true;
+        else return false;
 
     }
 
@@ -315,4 +313,5 @@ public class FTPServerFunctions {
     {
         sharedfile = fileitem;
     }
+
 }
