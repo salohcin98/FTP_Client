@@ -46,7 +46,7 @@ public class LoginPage {
 
         try{
 
-            FTPServerFunctions.addUser(username, password);
+            FTPServerFunctions.addUser(username, password, false);
 
             // try logging in and check if it failed
             if (!FTPServerFunctions.setupConnection(username, password))

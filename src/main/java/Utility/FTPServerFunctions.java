@@ -17,6 +17,7 @@ public class FTPServerFunctions {
     public static FTPClientHandler ftpClient;
     private static String username;
     private static FileItem sharedfile;
+    private static boolean admin;
 
     /**
      * sets username and password of the current user
@@ -28,19 +29,32 @@ public class FTPServerFunctions {
      *
      * note: please do not invert method. Do not listen to intellij
      */
-    public static boolean setupConnection(String username, String password) {
+    public static boolean setupConnection(String username, String password) throws SQLException {
         ftpClient = new FTPClientHandler(username, password);
         FTPServerFunctions.username = username;
 
         //test connection
         try{
-            boolean result = ftpClient.login(); // returns boolean indicating success
-            if (result) ftpClient.logout();
-            return result;
+            Connection conn = DBConnection.getConnection();
+            Statement st = conn.createStatement();
+            String query = "Select * from users.ftpuser where userid = '" + username + "' and status = 'Active'";
+            ResultSet rs = st.executeQuery(query);
+            if(rs.next()){
+                boolean result = ftpClient.login(); // returns boolean indicating success
+                if (result) ftpClient.logout();
+                isUserAdmin();
+                st.close();
+                rs.close();
+                return result;
+            }
+            st.close();
+            rs.close();
         } catch (IOException e){
             System.err.println(e.getMessage());
-            return false; // login failed
+
         }
+
+        return false; // login failed
     }
 
     /**
@@ -220,26 +234,30 @@ public class FTPServerFunctions {
     }
 
 
-    public static void addUser(String user, String pass) throws SQLException, UserAlreadyExists {
+    public static void addUser(String user, String pass, boolean admin) throws SQLException, UserAlreadyExists {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
         String query = "Select * from users.ftpuser where userid = '" + user + "'";
         ResultSet rs = st.executeQuery(query);
 
         if(rs.next()) {
-            st.close();
-            rs.close();
+
 
             throw new UserAlreadyExists("User Already Exists");
         } else {
-            query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell)" +
-                    " VALUES ('"+ user +
-                    "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin')";
+            if(admin) {
+                query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell, admin, status)" +
+                        " VALUES ('" + user +
+                        "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin', 'x', 'Active')";
+            } else {
+                query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell, status)" +
+                        " VALUES ('" + user +
+                        "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin' ,'Active')";
+            }
             st.executeUpdate(query);
-
-            st.close();
-            rs.close();
         }
+        st.close();
+        rs.close();
     }
 
     public static void deleteUser(String user) throws SQLException{
@@ -251,7 +269,7 @@ public class FTPServerFunctions {
         if(!rs.next()) {
             System.out.println("Error... user does not exist.");
         } else {
-            query = "Delete from users.ftpuser where userid = '" + user + "'";
+            query = "update users.ftpuser set status = 'Inactive' where userid = '" + user + "'";
             st.executeUpdate(query);
         }
         st.close();
@@ -274,10 +292,14 @@ public class FTPServerFunctions {
         return users;
     }
 
-    public static boolean isUserAdmin() throws SQLException {
+    public static void isUserAdmin() throws SQLException {
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        String query = "Select * from users.ftpuser where userid = '" + username + "' and admin = 'x' and status = 'Active'";
+        ResultSet rs = st.executeQuery(query);
+        if(rs.next())  admin = true;
+        else admin = false;
 
-
-        return false;
     }
 
     // Return username
