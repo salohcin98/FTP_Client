@@ -8,7 +8,10 @@ import Utility.FXMLSceneController;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+
 import org.apache.commons.net.ftp.FTP;
 
 import java.io.IOException;
@@ -35,13 +38,17 @@ public class FTPAdmin
     }
 
     //adds user to the database
-    public void createUser() throws SQLException, IOException {
-        try {
+    public void createUser() throws SQLException, IOException
+    {
+        Alert alert = new Alert(Alert.AlertType.ERROR, "User Already Exists", ButtonType.OK);
+
+        try
+        {
             FTPServerFunctions.addUser(userField.getText(), passField.getText());
             clearFields();
         } catch (UserAlreadyExists uae) {
-            FTPError ftpError = new FTPError("This user already exists, please choose a different name or log in");
-            ftpError.display();
+            alert.showAndWait();
+            clearFields();
         }
     }
 
