@@ -157,9 +157,11 @@ public class FTPMain implements Initializable {
         if(FTPServerFunctions.isUserAdmin())
             FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
         else {
-            // front end, add a popup error message here.
-            // Make it so the admin button is seperate and doenst show up if they're not actually an damin
-            // call the ftpserverfunctions.isuseradmin to return boolean
+            /**
+            * front end, add a popup error message here.
+            * Make it so the admin button is separate and doesn't show up if they're not actually an admin
+            * call the ftpserverfunctions.isuseradmin to return boolean
+             */
         }
 
     }
@@ -168,7 +170,6 @@ public class FTPMain implements Initializable {
     {
         FXMLSceneController.swapScene("LoginPage");
         FTPServerFunctions.clearUsername();
-        //need an exit to the FTP Client
     }
 
     public void handleShareButton() throws IOException
