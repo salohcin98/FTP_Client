@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 
 import org.apache.commons.net.ftp.FTP;
 
@@ -19,37 +19,51 @@ import java.sql.SQLException;
 
 public class FTPAdmin
 {
-    @FXML
-    private Button userCreate;
-    @FXML
-    private Button userDelete;
+//    @FXML
+//    private Button userCreate;
+//    @FXML
+//    private Button userDelete;
     @FXML
     private TextField userField;
     @FXML
     private TextField passField;
+    @FXML
+    private Label errorLabel;
 
     public void clearFields() {userField.setText(""); passField.setText("");}
 
     //deletes user from the database
-    public void deleteUser() throws SQLException
+    public void deleteUser()
     {
-        FTPServerFunctions.deleteUser(userField.getText());
-        clearFields();
+        try{
+            FTPServerFunctions.deleteUser(userField.getText());
+            clearFields();
+        }catch(SQLException e){
+            showError("");
+        }
     }
 
     //adds user to the database
-    public void createUser() throws SQLException, IOException
+    public void createUser()
     {
-        Alert alert = new Alert(Alert.AlertType.ERROR, "User Already Exists", ButtonType.OK);
-
         try
         {
             FTPServerFunctions.addUser(userField.getText(), passField.getText());
             clearFields();
-        } catch (UserAlreadyExists uae) {
-            alert.showAndWait();
+        } catch (UserAlreadyExists e) {
+            showError("Account Already Exists!");
+            clearFields();
+        } catch (SQLException e){
+            showError("Username or password contains invalid characters!");
             clearFields();
         }
+
+    }
+
+    private void showError(String message)
+    {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
     }
 
 }

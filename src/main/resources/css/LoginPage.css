@@ -1,0 +1,40 @@
+.background-image{
+    -fx-background-image: url('https://static.vecteezy.com/system/resources/thumbnails/027/894/192/small_2x/abstract-background-of-motion-speed-lines-design-free-photo.jpg');
+    -fx-background-size: cover; /* or contain, based on how you want the image to fit */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.login-button {
+    -fx-background-color: #1E90FF; /* Cornflower Blue background color */
+    -fx-background-radius: 10; /* Rounds the edges */
+    -fx-text-fill: white; /* Text color (optional, set to white for visibility on cornflower blue background) */
+    -fx-font-size: 14px; /* Font size (optional) */
+    -fx-font-weight: bold; /* Font weight (optional) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0.0, 0, 2); /* Drop shadow effect */
+}
+
+.create-button {
+    -fx-background-color: #2E8B57; /* Dark Sea Green background color */
+    -fx-background-radius: 10; /* Rounds the edges */
+    -fx-text-fill: white; /* Text color (optional, set to white for visibility on dark sea green background) */
+    -fx-font-size: 14px; /* Font size (optional) */
+    -fx-font-weight: bold; /* Font weight (optional) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0.0, 0, 2); /* Drop shadow effect */
+}
+
+.login-button:hover {
+    -fx-background-color: #4169E1; /* Red background color on hover (lighter shade) */
+}
+
+.login-button:pressed {
+    -fx-background-color: #6495ED; /* Darker shade on button press */
+}
+
+.create-button:hover {
+    -fx-background-color: #556B2F;
+}
+
+.create-button:pressed{
+    -fx-background-color: #8FBC8F;
+}

@@ -1,0 +1,33 @@
+.delete-button {
+    -fx-background-color: #ff0000; /* Red background color */
+    -fx-background-radius: 10; /* Rounds the edges */
+    -fx-text-fill: white; /* Text color (optional, set to white for visibility on red background) */
+    -fx-font-size: 14px; /* Font size (optional) */
+    -fx-font-weight: bold; /* Font weight (optional) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0.0, 0, 2); /* Drop shadow effect */
+}
+
+.create-button {
+    -fx-background-color: #00cc00; /* Lime background color */
+    -fx-background-radius: 10; /* Rounds the edges */
+    -fx-text-fill: white; /* Text color (optional, set to white for visibility on red background) */
+    -fx-font-size: 14px; /* Font size (optional) */
+    -fx-font-weight: bold; /* Font weight (optional) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0.0, 0, 2); /* Drop shadow effect */
+}
+
+.delete-button:hover {
+    -fx-background-color: #cc0000; /* Red background color on hover (lighter shade) */
+}
+
+.delete-button:pressed {
+    -fx-background-color: #aa0000; /* Darker shade on button press */
+}
+
+.create-button:hover {
+    -fx-background-color: #00ff00;
+}
+
+.create-button:pressed{
+    -fx-background-color: #00aa00;
+}
