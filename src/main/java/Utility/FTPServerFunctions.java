@@ -16,7 +16,7 @@ public class FTPServerFunctions {
 
     public static FTPClientHandler ftpClient;
     private static String username;
-    private static FileItem file;
+    private static FileItem sharedfile;
 
     /**
      * sets username and password of the current user
@@ -28,19 +28,31 @@ public class FTPServerFunctions {
      *
      * note: please do not invert method. Do not listen to intellij
      */
-    public static boolean setupConnection(String username, String password) {
+    public static boolean setupConnection(String username, String password) throws SQLException {
         ftpClient = new FTPClientHandler(username, password);
         FTPServerFunctions.username = username;
 
         //test connection
         try{
-            boolean result = ftpClient.login(); // returns boolean indicating success
-            if (result) ftpClient.logout();
-            return result;
+            Connection conn = DBConnection.getConnection();
+            Statement st = conn.createStatement();
+            String query = "Select * from users.ftpuser where userid = '" + username + "' and status = 'Active'";
+            ResultSet rs = st.executeQuery(query);
+            if(rs.next()){
+                boolean result = ftpClient.login(); // returns boolean indicating success
+                if (result) ftpClient.logout();
+                st.close();
+                rs.close();
+                return result;
+            }
+            st.close();
+            rs.close();
         } catch (IOException e){
             System.err.println(e.getMessage());
-            return false; // login failed
+
         }
+
+        return false; // login failed
     }
 
     /**
@@ -52,7 +64,7 @@ public class FTPServerFunctions {
     public static ArrayList<FileItem> getUserFiles() throws SQLException{
 
         Connection conn = DBConnection.getConnection();
-        String query = "Select fileID,fileName,fileSize,fileUpload from users.ftpfile where fileOwner = '" + username + "'";
+        String query = "Select * from users.ftpfile where fileOwner = '" + username + "'";
         ArrayList<FileItem> fileList = new ArrayList<>();
         Statement st1 = conn.createStatement();
         ResultSet rs = st1.executeQuery(query);
@@ -61,10 +73,11 @@ public class FTPServerFunctions {
             String fsize = Integer.toString(rs.getInt("fileSize"));
             String fName = rs.getString("fileName");
             String fUpload = rs.getString("fileUpload");
+            String fOwner = rs.getString("fileOwner");
 
             System.out.println("FileID: " + fid + " FileName: " + fName + " FileSize: " + fsize + " FileUpload: " + fUpload);
 
-            FileItem file = new FileItem(fName, fsize, fid, username, fUpload);
+            FileItem file = new FileItem(fName, fsize, fid, fOwner, fUpload);
             fileList.add(file);
         }
 
@@ -86,14 +99,15 @@ public class FTPServerFunctions {
             Statement st2 = conn.createStatement();
             ResultSet rs1 = st2.executeQuery(query2);
             while(rs1.next()) {
-                String fid1 = Integer.toString(rs1.getInt("fileID"));
-                String fsize1 = Integer.toString(rs1.getInt("fileSize"));
-                String fName1 = rs1.getString("fileName");
-                String fUpload1 = rs1.getString("fileUpload");
+                String fid = Integer.toString(rs1.getInt("fileID"));
+                String fsize = Integer.toString(rs1.getInt("fileSize"));
+                String fName = rs1.getString("fileName");
+                String fUpload = rs1.getString("fileUpload");
+                String fOwner = rs1.getString("fileOwner");
 
                 //System.out.println("FileID: " + fid1 + " FileName: " + fName1 + " FileSize: " + fsize1 + " FileUpload: " + fUpload1);
 
-                FileItem file = new FileItem(fName1, fsize1, fid1, username, fUpload1);
+                FileItem file = new FileItem(fName, fsize, fid, fOwner, fUpload);
                 fileList.add(file);
             }
             st2.close();
@@ -111,7 +125,9 @@ public class FTPServerFunctions {
     public static void uploadFileInfo(FileItem file, File fileFTP) throws SQLException, IOException {
         // SQL / Database Portion
         String query = "Select coalesce(max(fileid), 0)+1 as fid from users.ftpfile;";
-        ResultSet rs = DBConnection.SQLQuery(query);
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(query);
         int fileid = 0;
         if (rs.next()) {
             fileid = rs.getInt("fid");
@@ -129,10 +145,10 @@ public class FTPServerFunctions {
         query = "Insert into users.ftpfile (fileID,fileName,fileSize,fileDir,fileOwner)" +
                 "values(" + fileid + ",'" + filename + "'," + filesize
                 + ",'/mnt/userDir/" + fileid + "/" + filename +"','" + fileowner + "')";
-        Connection conn = DBConnection.getConnection();
-        Statement st = conn.createStatement();
+
         st.executeUpdate(query);
         st.close();
+        rs.close();
 
         // FTP Portion
         ftpClient.login();
@@ -151,12 +167,22 @@ public class FTPServerFunctions {
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
     public static void fileShare(String user) throws SQLException{
-        String fid = file.getFid();
-        String query = "Insert into users.ftpfile_share(fileID,userID) values (" + fid + ",'" + user + "')";
+
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
-        st.executeUpdate(query);
-        st.close();
+        String fid = sharedfile.getFid();
+        String fowner = sharedfile.getFowner();
+
+        String query = "Select * from users.ftpfile_share where userid = '" + user + "' and fileid = " + fid;
+        ResultSet rs = st.executeQuery(query);
+        if(fowner != user && !rs.next()) {
+            query = "Insert into users.ftpfile_share(fileID,userID) values (" + fid + ",'" + user + "')";
+            st.executeUpdate(query);
+            st.close();
+        } else {
+            System.out.println("Error.... Cannot share file with the file owner.");
+        }
+        rs.close();
     }
 
     /**
@@ -170,63 +196,65 @@ public class FTPServerFunctions {
         // SQL / Database Portion
         String fid = file.getFid();
         String fname = file.getFname();
-        String query = "select * from users.ftpfile_share where fileID = " + fid;
+        String fowner = file.getFowner();
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
 
-        try {
-            Connection conn = DBConnection.getConnection();
-            Statement st = conn.createStatement();
+        String query = "select * from users.ftpfile_share where fileID = " + fid + " and userid = '" + username + "'";
+        if(fowner == username) {
 
             ResultSet rs = st.executeQuery(query);
-            if(rs.next()){
+            if (rs.next()) {
                 query = "Delete from users.ftpfile_share where fileID = " + fid;
                 st.executeUpdate(query);
             }
             query = "Delete from users.ftpfile where fileID = " + fid;
             st.executeUpdate(query);
-            st.close();
             rs.close();
-
+            // FTP Portion
+            ftpClient.login();
+            ftpClient.deleteFile(fname, fid);
+            ftpClient.logout();
         }
-        catch (SQLException e) {
-            System.out.println("Message: " + e.getMessage());
+        else {
+            query = "Delete from users.ftpfile_share where fileID = " + fid + " and userid = '" + username + "'";
+            st.executeUpdate(query);
         }
-
-        // FTP Portion
-        ftpClient.login();
-        //ftpClient.enterLocalPassiveMode();
-        ftpClient.deleteFile(fname, fid);
-        ftpClient.logout();
+        st.close();
     }
 
     // ftp download file
     public static void downloadFile(FileItem file, OutputStream fos) throws Exception {
         ftpClient.login();
-        //ftpClient.enterLocalPassiveMode();
         ftpClient.downloadFile(file.getFname(), file.getFid(), fos);
         ftpClient.logout();
     }
 
 
-    public static void addUser(String user, String pass) throws SQLException, UserAlreadyExists {
+    public static void addUser(String user, String pass, boolean admin) throws SQLException, UserAlreadyExists {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
         String query = "Select * from users.ftpuser where userid = '" + user + "'";
         ResultSet rs = st.executeQuery(query);
 
         if(rs.next()) {
-            st.close();
-            rs.close();
+
 
             throw new UserAlreadyExists("User Already Exists");
         } else {
-            query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell)" +
-                    " VALUES ('"+ user +
-                    "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin')";
+            if(admin) {
+                query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell, admin, status)" +
+                        " VALUES ('" + user +
+                        "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin', 'x', 'Active')";
+            } else {
+                query = "INSERT INTO users.ftpuser (userid, passwd, uid, gid, homedir, shell, status)" +
+                        " VALUES ('" + user +
+                        "', ENCRYPT('" + pass + "'), " + 500 + ", " + 500 + ", '/mnt/userDir', '/sbin/nologin' ,'Active')";
+            }
             st.executeUpdate(query);
-
-            st.close();
-            rs.close();
         }
+        st.close();
+        rs.close();
     }
 
     public static void deleteUser(String user) throws SQLException{
@@ -238,7 +266,7 @@ public class FTPServerFunctions {
         if(!rs.next()) {
             System.out.println("Error... user does not exist.");
         } else {
-            query = "Delete from users.ftpuser where userid = '" + user + "'";
+            query = "update users.ftpuser set status = 'Inactive' where userid = '" + user + "'";
             st.executeUpdate(query);
         }
         st.close();
@@ -250,7 +278,7 @@ public class FTPServerFunctions {
         Statement st = conn.createStatement();
         ArrayList<String> users = new ArrayList<>();
 
-        String query = "Select userid from users.ftpuser where userid <> '" + username + "'";
+        String query = "Select userid from users.ftpuser where userid <> '" + username + "' and userid <> '" + sharedfile.getFowner() + "'";
         ResultSet rs = st.executeQuery(query);
         while(rs.next()) {
             String userid = rs.getString("userid");
@@ -259,6 +287,16 @@ public class FTPServerFunctions {
         st.close();
         rs.close();
         return users;
+    }
+
+    public static boolean isUserAdmin() throws SQLException {
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        String query = "Select * from users.ftpuser where userid = '" + username + "' and admin = 'x' and status = 'Active'";
+        ResultSet rs = st.executeQuery(query);
+        if(rs.next())  return true;
+        else return false;
+
     }
 
     // Return username
@@ -273,6 +311,7 @@ public class FTPServerFunctions {
 
     public static void setFile(FileItem fileitem)
     {
-        file = fileitem;
+        sharedfile = fileitem;
     }
+
 }
