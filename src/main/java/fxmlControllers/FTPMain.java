@@ -5,15 +5,17 @@ import Entities.Folder;
 import Entities.Item;
 import Utility.FTPServerFunctions;
 import Utility.FXMLSceneController;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.control.Menu;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import javafx.fxml.FXML;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import javafx.scene.control.Menu;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,16 +37,10 @@ public class FTPMain implements Initializable {
     @FXML
     private TreeTableColumn<Item, String> fsize;
     @FXML
-    private TreeTableColumn<Item, String> fid;
-    @FXML
     private TreeTableColumn<Item, String> dadded;
 
     @FXML
     private Button uploadButton;
-    @FXML
-    private Button shareButton;
-    @FXML
-    private Button deleteButton;
     @FXML
     private Button downloadButton;
     @FXML
@@ -60,7 +56,6 @@ public class FTPMain implements Initializable {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
-        //fid.setCellValueFactory(new TreeItemPropertyValueFactory<>("fid"));
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
@@ -86,14 +81,8 @@ public class FTPMain implements Initializable {
             {
                 menuAdmin.setVisible(false);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();}
-    }
-
-    public void reinitialize()
-    {
-        initializeScene();
     }
 
     // Helper method to generate TreeItems from the data list
@@ -169,29 +158,23 @@ public class FTPMain implements Initializable {
         FTPServerFunctions.downloadFile((FileItem) selectedFile.getValue(), fos);
 
         // Refresh the table
-        initialize(null, null);
+        initializeScene();
     }
 
+    @FXML
     public void handleFileAdmin() throws IOException, SQLException {
         if(FTPServerFunctions.isUserAdmin())
             FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
-        else {
-
-            /**
-            * front end, add a popup error message here.
-            * Make it so the admin button is separate and doesn't show up if they're not actually an admin
-            * call the ftpserverfunctions.isuseradmin to return boolean
-             */
-        }
-
     }
 
+    @FXML
     public void handleFileLogout() throws IOException
     {
         FXMLSceneController.swapScene("LoginPage");
         FTPServerFunctions.clearUsername();
     }
 
+    @FXML
     public void handleShareButton() throws IOException
     {
         // Whatever the user has selected
@@ -206,6 +189,22 @@ public class FTPMain implements Initializable {
     }
 
 
+    //Executes searchFile() when enter is pressed in search field
+    @FXML
+    private void handleKeyPress(KeyEvent event)
+    {
+        if(event.getCode().equals(KeyCode.ENTER))
+        {
+            searchFile();
+        }
+    }
+
+    //Searches for file and selects it
+    @FXML
+    public void searchFile()
+    {
+
+    }
 }
 
 

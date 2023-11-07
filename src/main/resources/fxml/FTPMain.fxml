@@ -23,9 +23,9 @@
                     </menus>
                   </MenuBar>
                   <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" onAction="#handleUpload" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Button layoutX="538.0" mnemonicParsing="false" onAction="#reinitialize" prefHeight="28.0" prefWidth="89.0" text="Refresh" />
-                  <TextField layoutX="212.0" prefHeight="28.0" prefWidth="296.0" />
-                  <Button layoutX="507.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="31.0" style="-fx-background-color: lightgrey;" styleClass="search-image" stylesheets="@../css/FTPMain.css" />
+                  <Button layoutX="538.0" mnemonicParsing="false" onAction="#initializeScene" prefHeight="28.0" prefWidth="89.0" text="Refresh" />
+                  <TextField layoutX="212.0" onKeyPressed="#handleKeyPress" prefHeight="28.0" prefWidth="296.0" />
+                  <Button layoutX="507.0" mnemonicParsing="false" onAction="#searchFile" prefHeight="28.0" prefWidth="31.0" style="-fx-background-color: lightgrey;" styleClass="search-image" stylesheets="@../css/FTPMain.css" />
                </children></AnchorPane>
             <AnchorPane prefHeight="448.0" prefWidth="697.0" VBox.vgrow="ALWAYS">
                <children>
