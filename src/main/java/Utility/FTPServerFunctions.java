@@ -70,10 +70,12 @@ public class FTPServerFunctions {
         ResultSet rs = st1.executeQuery(query);
         while(rs.next()) {
             String fid = Integer.toString(rs.getInt("fileID"));
-            String fsize = Integer.toString(rs.getInt("fileSize"));
+            int fileSizeInBytes = rs.getInt("fileSize");
+            double fizeSizeInMb = fileSizeInBytes / (1024.0 * 1024.0);
             String fName = rs.getString("fileName");
             String fUpload = rs.getString("fileUpload");
             String fOwner = rs.getString("fileOwner");
+            String fsize = String.format("%.2f MB", fizeSizeInMb);
 
             System.out.println("FileID: " + fid + " FileName: " + fName + " FileSize: " + fsize + " FileUpload: " + fUpload);
 
@@ -100,10 +102,13 @@ public class FTPServerFunctions {
             ResultSet rs1 = st2.executeQuery(query2);
             while(rs1.next()) {
                 String fid = Integer.toString(rs1.getInt("fileID"));
-                String fsize = Integer.toString(rs1.getInt("fileSize"));
+                int fileSizeInBytes = rs1.getInt("fileSize");
+                double fizeSizeInMb = fileSizeInBytes / (1024.0 * 1024.0);
                 String fName = rs1.getString("fileName");
                 String fUpload = rs1.getString("fileUpload");
                 String fOwner = rs1.getString("fileOwner");
+                String fsize = String.format("%.2f MB", fizeSizeInMb);
+
 
                 //System.out.println("FileID: " + fid1 + " FileName: " + fName1 + " FileSize: " + fsize1 + " FileUpload: " + fUpload1);
 
