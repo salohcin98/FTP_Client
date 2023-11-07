@@ -3,32 +3,22 @@ package fxmlControllers;
 import Exceptions.UserAlreadyExists;
 
 import Utility.FTPServerFunctions;
-import Utility.FXMLSceneController;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-
-import org.apache.commons.net.ftp.FTP;
-
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class FTPAdmin
 {
-//    @FXML
-//    private Button userCreate;
-//    @FXML
-//    private Button userDelete;
     @FXML
     private TextField userField;
     @FXML
-    private TextField passField;
+    private PasswordField passField;
     @FXML
     private Label errorLabel;
+    @FXML
+    private CheckBox isAdmin;
 
     public void clearFields() {userField.setText(""); passField.setText("");}
 
@@ -39,7 +29,7 @@ public class FTPAdmin
             FTPServerFunctions.deleteUser(userField.getText());
             clearFields();
         }catch(SQLException e){
-            showError("");
+            showError("User does not exist!");
         }
     }
 
@@ -48,8 +38,17 @@ public class FTPAdmin
     {
         try
         {
-            FTPServerFunctions.addUser(userField.getText(), passField.getText(), false);
-            clearFields();
+            if(isAdmin.isSelected())
+            {
+                FTPServerFunctions.addUser(userField.getText(), passField.getText(), true);
+                clearFields();
+            }
+            else
+            {
+                FTPServerFunctions.addUser(userField.getText(), passField.getText(), false);
+                clearFields();
+            }
+
         } catch (UserAlreadyExists e) {
             showError("Account Already Exists!");
             clearFields();
@@ -57,9 +56,9 @@ public class FTPAdmin
             showError("Username or password contains invalid characters!");
             clearFields();
         }
-
     }
 
+    //Display error message
     private void showError(String message)
     {
         errorLabel.setText(message);

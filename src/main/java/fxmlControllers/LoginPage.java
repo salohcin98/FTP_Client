@@ -5,6 +5,9 @@ import Exceptions.UserAlreadyExists;
 import Utility.FXMLSceneController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -35,7 +38,7 @@ public class LoginPage {
     }
 
     @FXML
-    private void handleAccountCreate() throws SQLException, IOException {
+    private void handleAccountCreate() throws IOException {
         FTPServerFunctions.ftpClient = null;
 
         // Get the values from the username and password fields
@@ -70,5 +73,21 @@ public class LoginPage {
         //show error label
         errorLabel.setVisible(true);
         errorLabel.setText(message);
+    }
+
+    @FXML
+    private void handleKeyPress(KeyEvent event) throws Exception {
+        if (event.getCode().equals(KeyCode.TAB)) {
+            if (event.getSource() == usernameInput) {
+                Platform.runLater(() -> passwordInput.requestFocus());
+            } else if (event.getSource() == passwordInput) {
+                Platform.runLater(() -> usernameInput.requestFocus());
+            }
+            event.consume(); // Consume the event to prevent it from triggering other actions
+        }
+        else if(event.getCode().equals(KeyCode.ENTER))
+        {
+            handleLogin();
+        }
     }
 }

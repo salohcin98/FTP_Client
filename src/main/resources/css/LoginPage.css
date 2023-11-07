@@ -1,5 +1,5 @@
 .background-image{
-    -fx-background-image: url('https://static.vecteezy.com/system/resources/thumbnails/027/894/192/small_2x/abstract-background-of-motion-speed-lines-design-free-photo.jpg');
+    -fx-background-image: url('file:src/main/resources/background3.png');
     -fx-background-size: cover; /* or contain, based on how you want the image to fit */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;

@@ -1,0 +1,10 @@
+.search-image{
+    -fx-background-image: url('file:src/main/resources/searchIcon.jpeg');
+    -fx-background-size: cover; /* or contain, based on how you want the image to fit */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.search-button{
+    -fx-background-color: lightgrey;
+}

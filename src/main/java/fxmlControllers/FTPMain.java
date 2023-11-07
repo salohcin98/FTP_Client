@@ -13,6 +13,7 @@ import javafx.scene.control.TreeTableView;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.FileChooser;
+import javafx.scene.control.Menu;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,8 @@ public class FTPMain implements Initializable {
     private Button deleteButton;
     @FXML
     private Button downloadButton;
+    @FXML
+    private Menu menuAdmin;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -73,7 +76,14 @@ public class FTPMain implements Initializable {
         ftable.setRoot(generateTreeItems(new ArrayList<Item>(){{add(userFolder); add(sharedFolder);}}
                 , new Folder("root")));
         ftable.setShowRoot(false);
-    } catch (SQLException e) {
+
+        //check if admin, if not hide the Menu Admin
+        if(!FTPServerFunctions.isUserAdmin())
+        {
+            menuAdmin.setVisible(false);
+        }
+
+        } catch (SQLException e) {
             e.printStackTrace();}
     }
 
@@ -157,6 +167,7 @@ public class FTPMain implements Initializable {
         if(FTPServerFunctions.isUserAdmin())
             FXMLSceneController.createPopUp("FTPAdmin.fxml", "Admin");
         else {
+
             /**
             * front end, add a popup error message here.
             * Make it so the admin button is separate and doesn't show up if they're not actually an admin
