@@ -52,7 +52,11 @@ public class FTPMain implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        initializeScene();
+    }
 
+    public void initializeScene()
+    {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
@@ -60,31 +64,36 @@ public class FTPMain implements Initializable {
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
-        ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
-        ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
+            ArrayList<FileItem> userFiles = FTPServerFunctions.getUserFiles();
+            ArrayList<FileItem> sharedFiles = FTPServerFunctions.getSharedFiles();
 
-        System.out.println(userFiles);
+            System.out.println(userFiles);
 
-        Folder userFolder = new Folder(FTPServerFunctions.getUsername(), new ArrayList<Item>(){{
-            this.addAll(userFiles);
-        }});
+            Folder userFolder = new Folder(FTPServerFunctions.getUsername(), new ArrayList<Item>(){{
+                this.addAll(userFiles);
+            }});
 
-        Folder sharedFolder = new Folder("Shared", new ArrayList<Item>(){{
-            this.addAll(sharedFiles);
-        }});
+            Folder sharedFolder = new Folder("Shared", new ArrayList<Item>(){{
+                this.addAll(sharedFiles);
+            }});
 
-        ftable.setRoot(generateTreeItems(new ArrayList<Item>(){{add(userFolder); add(sharedFolder);}}
-                , new Folder("root")));
-        ftable.setShowRoot(false);
+            ftable.setRoot(generateTreeItems(new ArrayList<Item>(){{add(userFolder); add(sharedFolder);}}
+                    , new Folder("root")));
+            ftable.setShowRoot(false);
 
-        //check if admin, if not hide the Menu Admin
-        if(!FTPServerFunctions.isUserAdmin())
-        {
-            menuAdmin.setVisible(false);
-        }
+            //check if admin, if not hide the Menu Admin
+            if(!FTPServerFunctions.isUserAdmin())
+            {
+                menuAdmin.setVisible(false);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();}
+    }
+
+    public void reinitialize()
+    {
+        initializeScene();
     }
 
     // Helper method to generate TreeItems from the data list
@@ -195,6 +204,8 @@ public class FTPMain implements Initializable {
         FTPServerFunctions.setFile((FileItem) selectedFile.getValue());
         FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
     }
+
+
 }
 
 
