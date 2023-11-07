@@ -48,7 +48,7 @@ public class FTPAdmin
     {
         try
         {
-            FTPServerFunctions.addUser(userField.getText(), passField.getText());
+            FTPServerFunctions.addUser(userField.getText(), passField.getText(), false);
             clearFields();
         } catch (UserAlreadyExists e) {
             showError("Account Already Exists!");
