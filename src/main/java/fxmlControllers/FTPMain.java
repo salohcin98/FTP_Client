@@ -112,7 +112,7 @@ public class FTPMain implements Initializable {
         FTPServerFunctions.uploadFileInfo(fileItem, file);
 
         // Refresh the table (it should be fine to refresh here)
-        initialize(null, null);
+        initializeScene();
     }
 
     @FXML
