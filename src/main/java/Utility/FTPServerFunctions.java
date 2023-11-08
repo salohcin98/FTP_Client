@@ -70,10 +70,12 @@ public class FTPServerFunctions {
         ResultSet rs = st1.executeQuery(query);
         while(rs.next()) {
             String fid = Integer.toString(rs.getInt("fileID"));
-            String fsize = Integer.toString(rs.getInt("fileSize"));
+            int fileSizeInBytes = rs.getInt("fileSize");
+            double fizeSizeInMb = fileSizeInBytes / (1024.0 * 1024.0);
             String fName = rs.getString("fileName");
             String fUpload = rs.getString("fileUpload");
             String fOwner = rs.getString("fileOwner");
+            String fsize = String.format("%.2f MB", fizeSizeInMb);
 
             System.out.println("FileID: " + fid + " FileName: " + fName + " FileSize: " + fsize + " FileUpload: " + fUpload);
 
@@ -86,6 +88,12 @@ public class FTPServerFunctions {
         return fileList;
     }
 
+    /**
+     * Gets the a list of files shared with the user.
+     *
+     * @return {@link ArrayList} containing {@link FileItem}
+     * @throws SQLException when sql query is incorrect or some sql error occurs
+     */
     public static ArrayList<FileItem> getSharedFiles() throws SQLException{
         Connection conn = DBConnection.getConnection();
         ArrayList<FileItem> fileList = new ArrayList<>();
@@ -100,10 +108,13 @@ public class FTPServerFunctions {
             ResultSet rs1 = st2.executeQuery(query2);
             while(rs1.next()) {
                 String fid = Integer.toString(rs1.getInt("fileID"));
-                String fsize = Integer.toString(rs1.getInt("fileSize"));
+                int fileSizeInBytes = rs1.getInt("fileSize");
+                double fizeSizeInMb = fileSizeInBytes / (1024.0 * 1024.0);
                 String fName = rs1.getString("fileName");
                 String fUpload = rs1.getString("fileUpload");
                 String fOwner = rs1.getString("fileOwner");
+                String fsize = String.format("%.2f MB", fizeSizeInMb);
+
 
                 //System.out.println("FileID: " + fid1 + " FileName: " + fName1 + " FileSize: " + fsize1 + " FileUpload: " + fUpload1);
 
@@ -120,6 +131,7 @@ public class FTPServerFunctions {
     /**
      * Upload a file's info to the database
      * @param file the FileItem with the file's information
+     * @param fileFTP the physical file that is to be uploaded to the ftp server
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
      */
     public static void uploadFileInfo(FileItem file, File fileFTP) throws SQLException, IOException {
@@ -190,6 +202,7 @@ public class FTPServerFunctions {
      *
      * @param file the file's info
      * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     * @throws IOException when something goes wrong with the deletion of a file from the ftp server
      */
     public static void deleteFile(FileItem file) throws SQLException, IOException {
 
@@ -223,7 +236,13 @@ public class FTPServerFunctions {
         st.close();
     }
 
-    // ftp download file
+    /**
+     * Downloads a file from the ftp server
+     *
+     * @param file the file's info
+     * @param fos the file output stream for download
+     * @throws Exception when something goes wrong with the deletion of a file from the ftp server
+     */
     public static void downloadFile(FileItem file, OutputStream fos) throws Exception {
         ftpClient.login();
         ftpClient.downloadFile(file.getFname(), file.getFid(), fos);
@@ -231,6 +250,15 @@ public class FTPServerFunctions {
     }
 
 
+    /**
+     * creates a new user account in the database
+     *
+     * @param user the userid to be added to the new user
+     * @param pass the password to be added for the new user
+     * @param admin this is a boolean flag that either enables the new user to be an admin or not
+     * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     * @throws UserAlreadyExists when a user already exists with the same userid trying to be added
+     */
     public static void addUser(String user, String pass, boolean admin) throws SQLException, UserAlreadyExists {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
@@ -257,6 +285,12 @@ public class FTPServerFunctions {
         rs.close();
     }
 
+    /**
+     * deactivates a user in the system
+     *
+     * @param user the userid of the user to be deactivated
+     * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     */
     public static void deleteUser(String user) throws SQLException{
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
@@ -273,6 +307,11 @@ public class FTPServerFunctions {
         rs.close();
     }
 
+    /**
+     * gets a list of all users that a file can be shared with
+     * @return {@link ArrayList} containing {@link FileItem}
+     * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     */
     public static ArrayList<String> getAllUsers() throws SQLException{
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
@@ -289,6 +328,11 @@ public class FTPServerFunctions {
         return users;
     }
 
+    /**
+     * returns if the current user is an admin or not
+     * @return boolean
+     * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     */
     public static boolean isUserAdmin() throws SQLException {
         Connection conn = DBConnection.getConnection();
         Statement st = conn.createStatement();
@@ -296,6 +340,27 @@ public class FTPServerFunctions {
         ResultSet rs = st.executeQuery(query);
         if(rs.next())  return true;
         else return false;
+
+    }
+
+    /**
+     * reactivates an account that has been deactivated
+     * @param user the userid of the account to be reactivated
+     * @throws SQLException when something goes wrong with the sql database or with the sql statement
+     */
+    public static void reactivateUser(String user) throws SQLException {
+        Connection conn = DBConnection.getConnection();
+        Statement st = conn.createStatement();
+        String query = "Select * from users.ftpuser where userid = '" + user +"' and status = 'Inactive'";
+        ResultSet rs = st.executeQuery(query);
+        if(!rs.next()) {
+            // throw error here user does not exist or user is already active
+        } else {
+            query = "Update users.ftpuser set status = 'Active' where userid = '" + user + "'";
+            st.executeUpdate(query);
+        }
+        rs.close();
+        st.close();
 
     }
 
