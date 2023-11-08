@@ -7,12 +7,8 @@ import Utility.FTPServerFunctions;
 import Utility.FXMLSceneController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.control.Menu;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
@@ -45,6 +41,8 @@ public class FTPMain implements Initializable {
     private Button downloadButton;
     @FXML
     private Menu menuAdmin;
+    @FXML
+    private TextField searchField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -195,16 +193,38 @@ public class FTPMain implements Initializable {
     {
         if(event.getCode().equals(KeyCode.ENTER))
         {
-            searchFile();
+            handleSearch();
         }
     }
 
     //Searches for file and selects it
     @FXML
-    public void searchFile()
-    {
-
+    private void handleSearch() {
+        String searchString = searchField.getText().toLowerCase();
+        searchAndSelectItem(ftable.getRoot(), searchString);
     }
+
+    private void searchAndSelectItem(TreeItem<Item> root, String searchString) {
+        root.setExpanded(true); // Expand all nodes for better visibility
+
+        for (TreeItem<Item> item : root.getChildren()) {
+            // Check if the item's name contains the search string
+            if (item.getValue().getFname().toLowerCase().contains(searchString)) {
+                // Select the matching item
+                ftable.getSelectionModel().select(item);
+                int index = item.getParent().getChildren().indexOf(item);
+                ftable.scrollTo(index);
+                return; // Stop searching after the first match
+            }
+
+            // Recursively search in the child items
+            if (!item.getChildren().isEmpty()) {
+                searchAndSelectItem(item, searchString);
+            }
+        }
+    }
+
+
 }
 
 
