@@ -115,9 +115,6 @@ public class FTPServerFunctions {
                 String fOwner = rs1.getString("fileOwner");
                 String fsize = String.format("%.2f MB", fizeSizeInMb);
 
-
-                //System.out.println("FileID: " + fid1 + " FileName: " + fName1 + " FileSize: " + fsize1 + " FileUpload: " + fUpload1);
-
                 FileItem file = new FileItem(fName, fsize, fid, fOwner, fUpload);
                 fileList.add(file);
             }
@@ -340,7 +337,6 @@ public class FTPServerFunctions {
         ResultSet rs = st.executeQuery(query);
         if(rs.next())  return true;
         else return false;
-
     }
 
     /**

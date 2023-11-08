@@ -34,6 +34,8 @@ public class FTPMain implements Initializable {
     private TreeTableColumn<Item, String> fsize;
     @FXML
     private TreeTableColumn<Item, String> dadded;
+    @FXML
+    private TreeTableColumn<Item, String> fowner;
 
     @FXML
     private Button uploadButton;
@@ -54,6 +56,7 @@ public class FTPMain implements Initializable {
         // Set cell value factories
         fname.setCellValueFactory(new TreeItemPropertyValueFactory<>("fname"));
         fsize.setCellValueFactory(new TreeItemPropertyValueFactory<>("fsize"));
+        fowner.setCellValueFactory(new TreeItemPropertyValueFactory<>("fowner"));
         dadded.setCellValueFactory(new TreeItemPropertyValueFactory<>("dadded"));
 
         try {
