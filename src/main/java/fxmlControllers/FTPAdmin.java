@@ -6,6 +6,7 @@ import Utility.FTPServerFunctions;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.apache.commons.net.ftp.FTP;
 
 import java.sql.SQLException;
 
@@ -54,6 +55,17 @@ public class FTPAdmin
             clearFields();
         } catch (SQLException e){
             showError("Username or password contains invalid characters!");
+            clearFields();
+        }
+    }
+
+    public void reactivateUser()
+    {
+        try{
+            FTPServerFunctions.reactivateUser(userField.getText());
+            clearFields();
+        }catch(SQLException e){
+            showError("User does not exist!");
             clearFields();
         }
     }

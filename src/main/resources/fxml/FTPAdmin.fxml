@@ -8,7 +8,7 @@
       <TextField fx:id="userField" alignment="CENTER" layoutX="94.0" layoutY="44.0" prefHeight="26.0" prefWidth="222.0" promptText="Username" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="90.0" />
       <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="68.0" layoutY="14.0" prefHeight="18.0" prefWidth="291.0" textFill="RED" AnchorPane.leftAnchor="68.0" AnchorPane.rightAnchor="47.0" />
       <PasswordField fx:id="passField" alignment="CENTER" layoutX="95.0" layoutY="79.0" prefHeight="26.0" prefWidth="222.0" promptText="Password" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="89.0" />
-      <Button layoutX="213.0" layoutY="112.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="106.0" text="Reactivate User" AnchorPane.rightAnchor="90.0" />
+      <Button layoutX="213.0" layoutY="112.0" mnemonicParsing="false" onAction="#reactivateUser" prefHeight="26.0" prefWidth="106.0" text="Reactivate User" AnchorPane.rightAnchor="90.0" />
       <Button layoutX="95.0" layoutY="112.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="26.0" prefWidth="106.0" text="Deactivate User" AnchorPane.leftAnchor="95.0" />
       <Button layoutX="95.0" layoutY="149.0" mnemonicParsing="false" onAction="#createUser" prefHeight="26.0" prefWidth="106.0" text="Create User" AnchorPane.leftAnchor="95.0" />
       <CheckBox fx:id="isAdmin" layoutX="215.0" layoutY="153.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="106.0" text="User is Admin" AnchorPane.rightAnchor="90.0" />
