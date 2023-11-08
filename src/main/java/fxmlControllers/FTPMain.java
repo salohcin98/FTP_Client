@@ -212,8 +212,7 @@ public class FTPMain implements Initializable {
             if (item.getValue().getFname().toLowerCase().contains(searchString)) {
                 // Select the matching item
                 ftable.getSelectionModel().select(item);
-                int index = item.getParent().getChildren().indexOf(item);
-                ftable.scrollTo(index);
+                ftable.scrollTo(item.getParent().getChildren().indexOf(item));
                 return; // Stop searching after the first match
             }
 
