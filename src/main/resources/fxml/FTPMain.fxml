@@ -31,9 +31,10 @@
                <children>
                   <TreeTableView fx:id="ftable" prefHeight="446.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TreeTableColumn fx:id="fname" minWidth="300.0" prefWidth="464.0" text="Filename" />
-                        <TreeTableColumn fx:id="fsize" minWidth="0.0" prefWidth="388.0" text="Filesize" />
-                        <TreeTableColumn fx:id="dadded" minWidth="100.0" prefWidth="72.0" text="Date Added" />
+                      <TreeTableColumn fx:id="fname" minWidth="0.0" prefWidth="400.0" text="Filename" />
+                        <TreeTableColumn fx:id="fsize" minWidth="0.0" prefWidth="70.0" text="Filesize" />
+                        <TreeTableColumn minWidth="0.0" prefWidth="100.0" text="File Owner" />
+                        <TreeTableColumn fx:id="dadded" minWidth="0.0" prefWidth="250.0" text="Date Added" />
                     </columns>
                      <columnResizePolicy>
                         <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
