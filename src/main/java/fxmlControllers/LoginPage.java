@@ -58,8 +58,13 @@ public class LoginPage {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
 
-        try{
+        // If username or password is empty, show error
+        if (username.isEmpty() || password.isEmpty()) {
+            showError("Please enter a username and password");
+            return;
+        }
 
+        try{
             FTPServerFunctions.addUser(username, password, false);
 
             // try logging in and check if it failed
