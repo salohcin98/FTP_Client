@@ -213,13 +213,15 @@ public class FTPServerFunctions {
         Statement st = conn.createStatement();
 
         String query = "select * from users.ftpfile_share where fileID = " + fid + " and userid = '" + username + "'";
-        if(fowner == username) {
+        if(fowner.equals(username)) {
 
             ResultSet rs = st.executeQuery(query);
-            if (rs.next()) {
+            if (!rs.next()) {
+
                 query = "Delete from users.ftpfile_share where fileID = " + fid;
                 st.executeUpdate(query);
             }
+
             query = "Delete from users.ftpfile where fileID = " + fid;
             st.executeUpdate(query);
             rs.close();
