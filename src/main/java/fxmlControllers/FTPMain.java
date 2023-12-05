@@ -45,6 +45,8 @@ public class FTPMain implements Initializable {
     private Menu menuAdmin;
     @FXML
     private TextField searchField;
+    @FXML
+    private Label errorDisplay;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
@@ -86,7 +88,9 @@ public class FTPMain implements Initializable {
             {
                 menuAdmin.setVisible(false);
             }
-        } catch (SQLException e) {
+            hideError();
+        }
+        catch (SQLException e) {
             e.printStackTrace();}
     }
 
@@ -127,6 +131,9 @@ public class FTPMain implements Initializable {
         // Use FTPServerFunctions to upload file
         FTPServerFunctions.uploadFileInfo(fileItem, file);
 
+        // Hides the error
+        hideError();
+
         // Refresh the table (it should be fine to refresh here)
         initializeScene();
     }
@@ -141,9 +148,17 @@ public class FTPMain implements Initializable {
         // Whatever the user has selected
         TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
 
-        if (selectedFile == null) return; //check null
-        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
+        if (selectedFile == null) {
+            displayError("Please select a file to delete");
+            return; //check null
+        }
+        if (!(selectedFile.getValue() instanceof FileItem)) {
+            displayError("Please select a file to delete");
+            return; //check that file is selected and not folder
+        }
 
+        // Hides the error
+        hideError();
         // Use FTPServerFunctions to delete file
         FTPServerFunctions.deleteFile((FileItem) selectedFile.getValue());
 
@@ -160,8 +175,14 @@ public class FTPMain implements Initializable {
         // Whatever the user has selected
         TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
 
-        if (selectedFile == null) return; //check null
-        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
+        if (selectedFile == null) {
+            displayError("Please select a file to download");
+            return; //check null
+        }
+        if (!(selectedFile.getValue() instanceof FileItem)) {
+            displayError("Please select a file to download");
+            return; //check that file is selected and not folder
+        }
 
         // File Explorer for selecting where you want to save the file
         FileChooser fileChooser = new FileChooser();
@@ -180,6 +201,7 @@ public class FTPMain implements Initializable {
         // Use FTPServerFunctions to download file
         FTPServerFunctions.downloadFile((FileItem) selectedFile.getValue(), fos);
 
+        hideError();
         // Refresh the table
         initializeScene();
     }
@@ -216,9 +238,15 @@ public class FTPMain implements Initializable {
         // Whatever the user has selected
         TreeItem<Item> selectedFile = ftable.getSelectionModel().getSelectedItem();
 
-        if (selectedFile == null) return; //check null
-        if (!(selectedFile.getValue() instanceof FileItem)) return; //check that file is selected and not folder
-
+        if (selectedFile == null) {
+            displayError("Please select a file to share");
+            return; //check null
+        }
+        if (!(selectedFile.getValue() instanceof FileItem)) {
+            displayError("Please select a file to share");
+            return; //check that file is selected and not folder
+        }
+        hideError();
         // Get selected file from tree
         FTPServerFunctions.setFile((FileItem) selectedFile.getValue());
         FXMLSceneController.createPopUp("FTPShare.fxml", "Share");
@@ -269,6 +297,14 @@ public class FTPMain implements Initializable {
                 searchAndSelectItem(item, searchString);
             }
         }
+    }
+
+    private void displayError(String message){
+        errorDisplay.setText(message);
+        errorDisplay.setVisible(true);
+    }
+    private void hideError(){
+        errorDisplay.setVisible(false);
     }
 
 

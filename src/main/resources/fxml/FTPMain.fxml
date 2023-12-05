@@ -3,59 +3,60 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="526.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlControllers.FTPMain">
-   <children>
-      <VBox prefHeight="526.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <AnchorPane prefHeight="27.0" prefWidth="697.0">
-               <children>
-                  <MenuBar fx:id="mainMenuBar" prefHeight="28.0" prefWidth="212.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="485.0">
-                    <menus>
-                      <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-                        <items>
-                              <MenuItem fx:id="fileLogout" mnemonicParsing="false" onAction="#handleFileLogout" text="Logout" />
-                        </items>
-                      </Menu>
-                        <Menu fx:id="menuAdmin" mnemonicParsing="false" text="Admin">
-                           <items>
-                              <MenuItem fx:id="fileAdmin" mnemonicParsing="false" onAction="#handleFileAdmin" text="Admin" />
-                           </items></Menu>
-                    </menus>
-                  </MenuBar>
-                  <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" onAction="#handleUpload" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Button layoutX="538.0" mnemonicParsing="false" onAction="#initializeScene" prefHeight="28.0" prefWidth="89.0" text="Refresh" />
-                  <TextField fx:id="searchField" layoutX="212.0" onAction="#handleSearch" onKeyPressed="#handleKeyPress" prefHeight="28.0" prefWidth="296.0" />
-                  <Button layoutX="507.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="28.0" prefWidth="31.0" style="-fx-background-color: lightgrey;" styleClass="search-image" stylesheets="@../css/FTPMain.css" />
-               </children></AnchorPane>
-            <AnchorPane prefHeight="448.0" prefWidth="697.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <TreeTableView fx:id="ftable" prefHeight="446.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TreeTableColumn fx:id="fname" minWidth="0.0" prefWidth="400.0" text="Filename" />
-                        <TreeTableColumn fx:id="fsize" minWidth="0.0" prefWidth="70.0" text="Filesize" />
-                        <TreeTableColumn fx:id='fowner' minWidth="0.0" prefWidth="100.0" text="File Owner" />
-                        <TreeTableColumn fx:id="dadded" minWidth="0.0" prefWidth="250.0" text="Date Added" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TreeTableView>
-               </children></AnchorPane>
-            <AnchorPane prefHeight="52.0" prefWidth="697.0">
-               <children>
-                  <ToolBar prefHeight="52.0" prefWidth="529.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="168.0">
-                    <items>
-                      <Button fx:id="downloadButton" mnemonicParsing="false" onAction="#handleDownload" style="-fx-background-radius: 10;" text="Download" />
-                    </items>
-                  </ToolBar>
-                  <ToolBar layoutX="257.0" prefHeight="52.0" prefWidth="170.0" AnchorPane.rightAnchor="0.0">
-                     <items>
-                        <Button fx:id="shareButton" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="28.0" prefWidth="70.0" style="-fx-background-radius: 10;" text="Share" />
-                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" prefHeight="28.0" prefWidth="76.0" style="-fx-background-radius: 10;" text="Delete" />
-                     </items>
-                  </ToolBar>
-               </children></AnchorPane>
-         </children>
-      </VBox>
-   </children>
+<AnchorPane prefHeight="526.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmlControllers.FTPMain">
+    <children>
+        <VBox prefHeight="526.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <AnchorPane prefHeight="27.0" prefWidth="697.0">
+                    <children>
+                        <MenuBar fx:id="mainMenuBar" prefHeight="28.0" prefWidth="212.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="485.0">
+                            <menus>
+                                <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                                    <items>
+                                        <MenuItem fx:id="fileLogout" mnemonicParsing="false" onAction="#handleFileLogout" text="Logout" />
+                                    </items>
+                                </Menu>
+                                <Menu fx:id="menuAdmin" mnemonicParsing="false" text="Admin">
+                                    <items>
+                                        <MenuItem fx:id="fileAdmin" mnemonicParsing="false" onAction="#handleFileAdmin" text="Admin" />
+                                    </items></Menu>
+                            </menus>
+                        </MenuBar>
+                        <Button fx:id="uploadButton" layoutX="627.0" mnemonicParsing="false" onAction="#handleUpload" prefHeight="28.0" prefWidth="70.0" text="Upload" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Button layoutX="538.0" mnemonicParsing="false" onAction="#initializeScene" prefHeight="28.0" prefWidth="89.0" text="Refresh" />
+                        <TextField fx:id="searchField" layoutX="212.0" onAction="#handleSearch" onKeyPressed="#handleKeyPress" prefHeight="28.0" prefWidth="296.0" />
+                        <Button layoutX="507.0" mnemonicParsing="false" onAction="#handleSearch" prefHeight="28.0" prefWidth="31.0" style="-fx-background-color: lightgrey;" styleClass="search-image" stylesheets="@../css/FTPMain.css" />
+                    </children></AnchorPane>
+                <AnchorPane prefHeight="448.0" prefWidth="697.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <TreeTableView fx:id="ftable" prefHeight="446.0" prefWidth="697.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TreeTableColumn fx:id="fname" minWidth="0.0" prefWidth="400.0" text="Filename" />
+                                <TreeTableColumn fx:id="fsize" minWidth="0.0" prefWidth="70.0" text="Filesize" />
+                                <TreeTableColumn fx:id="fowner" minWidth="0.0" prefWidth="100.0" text="File Owner" />
+                                <TreeTableColumn fx:id="dadded" minWidth="0.0" prefWidth="250.0" text="Date Added" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TreeTableView>
+                    </children></AnchorPane>
+                <AnchorPane prefHeight="52.0" prefWidth="697.0">
+                    <children>
+                        <ToolBar prefHeight="52.0" prefWidth="529.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="168.0">
+                            <items>
+                                <Button fx:id="downloadButton" mnemonicParsing="false" onAction="#handleDownload" style="-fx-background-radius: 10;" text="Download" />
+                                <Label fx:id="errorDisplay" alignment="CENTER" prefHeight="17.0" prefWidth="439.0" textAlignment="CENTER" textFill="#d71717" />
+                            </items>
+                        </ToolBar>
+                        <ToolBar layoutX="257.0" prefHeight="52.0" prefWidth="170.0" AnchorPane.rightAnchor="0.0">
+                            <items>
+                                <Button fx:id="shareButton" mnemonicParsing="false" onAction="#handleShareButton" prefHeight="28.0" prefWidth="70.0" style="-fx-background-radius: 10;" text="Share" />
+                                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDelete" prefHeight="28.0" prefWidth="76.0" style="-fx-background-radius: 10;" text="Delete" />
+                            </items>
+                        </ToolBar>
+                    </children></AnchorPane>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
